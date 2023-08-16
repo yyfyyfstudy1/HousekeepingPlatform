@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.usyd.capstone.mapper.TaskTagMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.usyd.capstone.entity.TaskTag">
+        <id column="tag_ID" property="tagId" />
+        <result column="tag_Name" property="tagName" />
+        <result column="tag_Creater" property="tagCreater" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        tag_ID, tag_Name, tag_Creater
+    </sql>
+
+</mapper>

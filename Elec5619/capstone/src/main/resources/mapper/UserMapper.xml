@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.usyd.capstone.mapper.UserMapper">
+
+    <select id="listAll" resultType="com.usyd.capstone.entity.User">
+        select * from user;
+    </select>
+    <select id="pageC" resultType="com.usyd.capstone.entity.User">
+        select * from user
+    </select>
+    <select id="pageCC" resultType="com.usyd.capstone.entity.User">
+        select * from user ${ew.customSqlSegment}
+    </select>
+</mapper>

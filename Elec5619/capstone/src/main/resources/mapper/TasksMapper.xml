@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.usyd.capstone.mapper.TasksMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.usyd.capstone.entity.Tasks">
+        <id column="task_id" property="taskId" />
+        <result column="task_describe" property="taskDescribe" />
+        <result column="task_image_url" property="taskImageUrl" />
+        <result column="task_user_id" property="taskUserId" />
+        <result column="task_signed_id" property="taskSignedId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        task_id, task_describe, task_image_url, task_user_id, task_signed_id
+    </sql>
+
+</mapper>
