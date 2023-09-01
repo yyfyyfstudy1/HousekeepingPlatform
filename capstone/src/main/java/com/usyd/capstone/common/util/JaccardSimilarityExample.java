@@ -1,4 +1,4 @@
-package com.usyd.capstone.common;
+package com.usyd.capstone.common.util;
 
 import java.util.HashSet;
 import java.util.List;

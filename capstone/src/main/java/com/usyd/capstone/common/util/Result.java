@@ -1,4 +1,4 @@
-package com.usyd.capstone.common;
+package com.usyd.capstone.common.util;
 
 import lombok.Data;
 
@@ -12,7 +12,9 @@ public class Result {
     public static Result fail(){
         return result(400, "fail", 0L, null);
     }
-
+    public static Result fail(Object data){
+        return result(400, "fail", 0L, data);
+    }
     public static Result suc(){
         return result(200, "successful", 0L, null);
     }
@@ -21,6 +23,10 @@ public class Result {
     }
     public static Result suc(Object data, Long total){
         return result(200, "successful", total, data);
+    }
+
+    public static Result customize(int code, String msg, Long total, Object data){
+        return result(code, msg, total, data);
     }
     private static Result result(int code, String msg, Long total, Object data){
 

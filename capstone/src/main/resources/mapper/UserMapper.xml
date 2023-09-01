@@ -2,6 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.usyd.capstone.mapper.UserMapper">
+    <insert id="createUserRoleById" >
+        INSERT INTO role_user (userid, roleid)
+        VALUES (#{userId}, #{roleId});
+    </insert>
 
     <select id="listAll" resultType="com.usyd.capstone.entity.User">
         select * from user;
@@ -12,4 +16,41 @@
     <select id="pageCC" resultType="com.usyd.capstone.entity.User">
         select * from user ${ew.customSqlSegment}
     </select>
+
+    <resultMap id="roleResultMap" type="com.usyd.capstone.entity.Role">
+        <id property="id" column="id"/>
+        <result property="roleName" column="role_name"/>
+        <!-- 其他属性映射 -->
+    </resultMap>
+
+    <select id="findRoles" resultMap="roleResultMap" parameterType="java.lang.Long">
+        SELECT role_name
+        FROM role_user
+                 LEFT JOIN role ON role_user.roleid = role.id
+        WHERE role_user.userid = #{id}
+    </select>
+
+    <select id="findByEmail" resultType="com.usyd.capstone.entity.User" parameterType="java.lang.String">
+        SELECT * FROM user WHERE 1=1 AND Email = #{email}
+    </select>
+
+    <update id="updateAnOldInactivatedUser" parameterType="com.usyd.capstone.entity.User">
+        UPDATE User
+        SET password = #{password}, registration_timestamp = #{registrationTimestamp}
+        WHERE 1=1 AND id = #{id}
+    </update>
+
+    <select id="findByEmailAndRegistrationTimestampAndPassword" resultType="com.usyd.capstone.entity.User">
+        SELECT * FROM user
+        WHERE 1=1 AND Email = #{email} AND registration_timestamp = #{registrationTimestamp} AND password = #{password}
+    </select>
+
+    <update id="activeAnAccount" parameterType="com.usyd.capstone.entity.User">
+        UPDATE User
+        SET activation_status = TRUE
+        WHERE 1=1 AND id = #{id}
+    </update>
+
+
+
 </mapper>

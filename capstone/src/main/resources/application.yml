@@ -18,9 +18,19 @@ spring:
   datasource:
     #mysql
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/capstone?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/evangelion?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: root
     password: 123
     dbcp2:
       max-total: 150
       max-idle: 10
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: yyfnhk@gmail.com
+    password: mqxbbhdchlgbaxlb
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true

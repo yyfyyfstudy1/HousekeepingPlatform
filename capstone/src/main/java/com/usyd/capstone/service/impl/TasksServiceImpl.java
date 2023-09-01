@@ -16,7 +16,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.usyd.capstone.common.JaccardSimilarityExample.calculateJaccardSimilarity;
+import static com.usyd.capstone.common.util.JaccardSimilarityExample.calculateJaccardSimilarity;
 
 /**
  * <p>

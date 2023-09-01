@@ -3,14 +3,9 @@ package com.usyd.capstone.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.usyd.capstone.common.QueryPageParam;
-import com.usyd.capstone.common.Result;
-import com.usyd.capstone.entity.DTO.finalResponse;
-import com.usyd.capstone.entity.Tasks;
+import com.usyd.capstone.common.util.QueryPageParam;
+import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.User;
-import com.usyd.capstone.entity.VO.postTask;
-import com.usyd.capstone.entity.VO.requestDistribute;
-import com.usyd.capstone.service.TasksService;
 import com.usyd.capstone.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-public class helloController {
+public class publicController {
     @GetMapping
     public String hello(){
         return "hello";

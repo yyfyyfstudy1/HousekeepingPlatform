@@ -1,7 +1,7 @@
 package com.usyd.capstone.controller;
 
 
-import com.usyd.capstone.common.Result;
+import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.finalResponse;
 import com.usyd.capstone.entity.Tasks;
 import com.usyd.capstone.entity.VO.postTask;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2023年08月14日
  */
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/public/tasks")
 public class TasksController {
 
     @Autowired
