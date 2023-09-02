@@ -28,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 放行所有的websocket请求
                 .antMatchers("/imserver/**").permitAll()
 //                   .antMatchers("/user/registration").permitAll()
+                .antMatchers("/member/**").hasRole("USER") // 需要USER角色才能访问的URL
                 .antMatchers("/admin/**").hasRole("ADMIN") // 需要ADMIN角色才能访问的URL
                 .antMatchers("/superadmin/**").hasRole("SUPERADMIN") // 需要SUPERADMIN角色才能访问的URL
 

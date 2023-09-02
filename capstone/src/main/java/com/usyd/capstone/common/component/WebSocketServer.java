@@ -3,8 +3,11 @@ package com.usyd.capstone.common.component;
 import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.usyd.capstone.entity.MessageDB;
+import com.usyd.capstone.mapper.MessageMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -15,14 +18,30 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author websocket服务
  */
+
+
 @ServerEndpoint(value = "/imserver/{userEmail}")
 @Component
 public class WebSocketServer {
+
+
+    /**
+     * 用来解决webSocket中无法注入mapper
+     */
+    private static ApplicationContext applicationContext;
+
+
+    public static void setApplicationContext(ApplicationContext applicationContext) {
+        WebSocketServer.applicationContext = applicationContext;
+    }
+
     private static final Logger log = LoggerFactory.getLogger(WebSocketServer.class);
     /**
      * 记录当前在线连接数
      */
     public static final Map<String, Session> sessionMap = new ConcurrentHashMap<>();
+
+
     /**
      * 连接建立成功调用的方法
      */
@@ -72,6 +91,16 @@ public class WebSocketServer {
             jsonObject.put("from", userEmail);  // from 是 zhang
             jsonObject.put("text", text);  // text 同上面的text
             this.sendMessage(jsonObject.toString(), toSession);
+
+            MessageMapper messageMapper = applicationContext.getBean(MessageMapper.class);
+            // 存入数据库
+            MessageDB messageDB = new MessageDB();
+            messageDB.setPostMessageContent(text);
+            messageDB.setFromUserEmail(userEmail);
+            messageDB.setToUserEmail(toUserEmail);
+            messageDB.setPostTime(System.currentTimeMillis());
+            messageMapper.insert(messageDB);
+
             log.info("发送给用户userEmail={}，消息：{}", toUserEmail, jsonObject.toString());
         } else {
             log.info("发送失败，未找到用户userEmail={}的session", toUserEmail);

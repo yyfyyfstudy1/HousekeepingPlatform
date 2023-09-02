@@ -50,7 +50,7 @@ public class CodeGeneration {
 
 
 
-        DataSourceConfig dsc = new DataSourceConfig.Builder("jdbc:mysql://127.0.0.1:3306/capstone?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC","root","123")
+        DataSourceConfig dsc = new DataSourceConfig.Builder("jdbc:mysql://127.0.0.1:3306/evangelion?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC","root","123")
                 .dbQuery(mySqlQuery).build();
         //通过datasourceConfig创建AutoGenerator
         AutoGenerator generator = new AutoGenerator(dsc);
