@@ -9,15 +9,14 @@ import com.usyd.capstone.entity.User;
 import com.usyd.capstone.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 
+
 @RestController
+@RequestMapping("/public")
 public class publicController {
     @GetMapping
     public String hello(){
@@ -27,6 +26,11 @@ public class publicController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/hello")
+    public Result helloWord(){
+      List<User> userList =  userService.findAllUser();
+        return Result.suc(userList);
+    }
 
     @GetMapping("/List")
     public List<User> list(){

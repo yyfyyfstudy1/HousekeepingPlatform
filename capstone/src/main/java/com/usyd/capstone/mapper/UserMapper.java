@@ -31,4 +31,6 @@ public interface UserMapper extends BaseMapper<User> {
 
 
     void createUserRoleById(Long userId, Integer roleId);
+
+    List<User> finelec5619User();
 }

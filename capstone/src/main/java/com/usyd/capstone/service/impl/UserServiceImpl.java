@@ -24,15 +24,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
-    @Resource
+    @Autowired
     private UserMapper userMapper;
 
     @Autowired
@@ -276,7 +274,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return Result.suc("user password has been update");
     }
 
-
+    @Override
+    public List<User> findAllUser() {
+//        userMapper.selectList(new QueryWrapper<>());
+        return userMapper.finelec5619User();
+    }
 
 
 }

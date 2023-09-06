@@ -1,13 +1,10 @@
 package com.usyd.capstone.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.usyd.capstone.common.util.Result;
-import com.usyd.capstone.entity.DTO.finalResponse;
-import com.usyd.capstone.entity.Tasks;
 import com.usyd.capstone.entity.User;
 import com.usyd.capstone.entity.VO.EmailAddress;
 import com.usyd.capstone.entity.VO.UpdatePasswordParameter;
@@ -37,4 +34,5 @@ public interface UserService extends IService<User> {
 
     Result updatePassword(UpdatePasswordParameter updatePasswordParameter);
 
+    List<User> findAllUser();
 }

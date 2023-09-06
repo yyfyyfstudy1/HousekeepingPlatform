@@ -44,6 +44,9 @@
         SELECT * FROM user
         WHERE 1=1 AND Email = #{email} AND registration_timestamp = #{registrationTimestamp} AND password = #{password}
     </select>
+    <select id="finelec5619User" resultType="com.usyd.capstone.entity.User">
+        SELECT * FROM user WHERE 1=1 ;
+    </select>
 
     <update id="activeAnAccount" parameterType="com.usyd.capstone.entity.User">
         UPDATE User
