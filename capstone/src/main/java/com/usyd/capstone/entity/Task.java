@@ -5,11 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.util.List;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
 /**
@@ -24,7 +21,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @TableName("tasks")
 @Data
-public class Tasks implements Serializable {
+public class Task implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

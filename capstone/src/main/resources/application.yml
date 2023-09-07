@@ -8,6 +8,12 @@ server:
     max-file-size:
     max-request-size: -1
 spring:
+  task:
+    execution:
+      pool:
+        core-size: 5        # 核心线程数
+        max-size: 10        # 最大线程数
+        queue-capacity: 100 # 任务队列容量
   # 文件上传
   servlet:
     multipart:

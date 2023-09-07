@@ -3,7 +3,7 @@ package com.usyd.capstone.controller;
 
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.finalResponse;
-import com.usyd.capstone.entity.Tasks;
+import com.usyd.capstone.entity.Task;
 import com.usyd.capstone.entity.VO.postTask;
 import com.usyd.capstone.entity.VO.requestDistribute;
 import com.usyd.capstone.service.TasksService;
@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * <p>
@@ -30,10 +33,10 @@ public class TasksController {
     private TasksService tasksService;
 
     @PostMapping("/getDistribute")
-    public Result getDistribute(@RequestBody requestDistribute query){
+    public Result getDistribute(@RequestBody requestDistribute query) throws ExecutionException, InterruptedException {
 
 
-        finalResponse result = tasksService.distribute(query.getCV(), query.getTags());
+        List<finalResponse> result = tasksService.distribute(query.getCV(), query.getTags());
 
 
         return Result.suc(result);
@@ -42,7 +45,7 @@ public class TasksController {
     // customer post requirement
     @PostMapping("/postTask")
     public Result postTask(@RequestBody postTask task){
-        Tasks newTask = new Tasks();
+        Task newTask = new Task();
         newTask.setTaskDescribe(task.getTaskDescribe());
         newTask.setTaskLabel(task.getTaskLabel().toString());
         newTask.setTaskUserId(task.getTaskUserID());

@@ -2,11 +2,13 @@ package com.usyd.capstone.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.usyd.capstone.entity.DTO.*;
-import com.usyd.capstone.entity.Tasks;
+import com.usyd.capstone.entity.Task;
 import com.usyd.capstone.mapper.TasksMapper;
 import com.usyd.capstone.service.TasksService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,6 +17,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import static com.usyd.capstone.common.util.JaccardSimilarityExample.calculateJaccardSimilarity;
 
@@ -27,7 +33,7 @@ import static com.usyd.capstone.common.util.JaccardSimilarityExample.calculateJa
  * @since 2023年08月14日
  */
 @Service
-public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements TasksService {
+public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements TasksService {
     @Resource
     private TasksMapper tasksMapper;
 
@@ -35,15 +41,68 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
 
     private final String chatGptApiUrl = "https://api.openai.com/v1/chat/completions"; // ChatGPT API URL
     @Override
-    public finalResponse distribute(String cv, List<String> tags) {
+    public List<finalResponse> distribute(String cv, List<String> tags) throws ExecutionException, InterruptedException {
 
-        // get the top 5 of tag Similarity
-        List<Tasks> tasksGet = calculateSimilarityTopFIve(tags);
+        // get the top 3 of tag Similarity
+        List<Task> taskGet = calculateSimilarityTopThree(tags);
 
-        HashMap<String, String> tasks =new HashMap<>();
-        for (Tasks tt: tasksGet){
-            tasks.put(tt.getTaskId().toString(), tt.getTaskDescribe());
+        int numberOfTasks = 3;
+
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfTasks);
+        List<Future<finalResponse>> futures = new ArrayList<>();
+
+        // 同时触发三个异步任务，并将Future对象添加到列表中
+        for (int i = 0; i < numberOfTasks; i++) {
+            int finalI = i;
+            Future<finalResponse> future = executorService.submit(() -> performAsyncTask(cv, taskGet.get(finalI)).get());
+            futures.add(future);
         }
+
+        // 等待所有任务执行完毕并收集结果
+        List<finalResponse> results = new ArrayList<>();
+
+        for (Future<finalResponse> future : futures) {
+            finalResponse result = future.get();
+            results.add(result);
+        }
+
+        // 关闭线程池
+        executorService.shutdown();
+
+        return results;
+    }
+
+
+    private List<Task> calculateSimilarityTopThree(List<String> tags){
+        List<Task> taskGet = tasksMapper.selectList(null);
+        List<Task> result = new ArrayList<>();
+
+        for (Task task : taskGet) {
+
+            List<String>  tagList = JSON.parseArray(task.getTaskLabel(), String.class);
+            double jaccardSimilarity = calculateJaccardSimilarity(tagList, tags);
+
+            if (jaccardSimilarity > 0) {  // Exclude results with similarity of 0
+                task.setSimilarity(jaccardSimilarity);
+                result.add(task);
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+                System.out.println(task.getTaskDescribe() + task.getSimilarity());
+            }
+        }
+
+        // sort by similarity
+        result.sort(Comparator.comparingDouble(Task::getSimilarity).reversed());
+
+        // get the top three
+        return result.subList(0, Math.min(3, result.size()));
+    }
+
+
+
+    @Async
+    public Future<finalResponse> performAsyncTask(String cv, Task task) {
+        // 异步任务的逻辑，返回一个finalResponse结果
+        finalResponse finalResponse = new finalResponse();
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -52,23 +111,15 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
         headers.set("Authorization", "Bearer " + apiKey);
 
         StringBuilder use = new StringBuilder();
-        use.append("现在我经营一个劳务平台，现在有一个劳动者，他的简历是<");
+        use.append("Now,please play as a labor service intelligent platform, and there is a worker whose resume is <");
         use.append(cv);
-        use.append(">现在作为一个劳务平台，我这里有多个任务与他的标签匹配，请你作为一个智能平台选出一个和他匹配度最高的，并且给出我理由。请不要说额外的话,回复的时候把<我>这个字替换成<你>." +
-                "回复严格按照Json的格式 {'systemChoice':'(选择前面任务的编号数字)','reason':'因为你xxxxx'}");
+        use.append("> there have a task that matches his label. Please analyze the reason why this task is suitable for him. Please don’t say any extra words, like the describe of task,  just give  your reason. When replying,Use the second person perspective, replace the word <my> and <his> with <your>." );
 
-
-        for (String key : tasks.keySet()) {
-            String value = tasks.get(key);
-            use.append(" 任务：").append(key).append(" ").append(value);
-            use.append(";");
-        }
-
+        use.append(" task:").append(task.getTaskDescribe());
+        use.append(";");
         System.out.println(use);
 
-        String requestBody = "{\"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}, {\"role\": \"system\", \"content\": \"[清除上下文]\"}, {\"role\": \"user\", \"content\": \"" + use + "\"}], \"model\": \"gpt-3.5-turbo\"}";
-
-
+        String requestBody = "{\"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful assistant.\"}, {\"role\": \"system\", \"content\": \"[clear context]\"}, {\"role\": \"user\", \"content\": \"" + use + "\"}], \"model\": \"gpt-3.5-turbo\"}";
 
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
 
@@ -85,56 +136,21 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
             Choice choice = chatCompletion.getChoices().get(0);
             Message message = choice.getMessage();
             String content = message.getContent();
-            // Use regex to replace single quotes with double quotes
-            String result = content.replaceAll("'", "\"");
 
-            // string to object
-            GPTResponseJSON gptResponseJSON = JSON.parseObject(result, GPTResponseJSON.class);
+            // set gpt response to finalResponse
+            finalResponse.setTask(task);
+            finalResponse.setGptReply(content);
+            System.out.println(content);
 
-            // find the selection of GPT
-            Tasks choiceTask = tasksMapper.selectById(Integer.parseInt(gptResponseJSON.getSystemChoice()));
-
-            finalResponse finalResponse = new finalResponse();
-            finalResponse.setTasks(choiceTask);
-            finalResponse.setGptReply(gptResponseJSON.getReason());
-
-            System.out.println(gptResponseJSON.getReason());
-            System.out.println(choiceTask);
-            return finalResponse;
         } else {
             // 处理错误情况
-            Tasks errorTask = new Tasks();
+            Task errorTask = new Task();
             errorTask.setTaskId(999999);
             errorTask.setTaskDescribe("An error occurred while communicating with ChatGPT API.");
-            finalResponse finalResponse = new finalResponse();
-            finalResponse.setTasks(errorTask);
+            finalResponse.setTask(errorTask);
             finalResponse.setGptReply("error error");
-            return finalResponse;
-        }
-    }
-
-
-    private List<Tasks> calculateSimilarityTopFIve(List<String> tags){
-        List<Tasks> tasksGet = tasksMapper.selectList(null);
-        List<Tasks> result = new ArrayList<>();
-
-        for (Tasks task : tasksGet) {
-
-            List<String>  tagList = JSON.parseArray(task.getTaskLabel(), String.class);
-            double jaccardSimilarity = calculateJaccardSimilarity(tagList, tags);
-
-            if (jaccardSimilarity > 0) {  // Exclude results with similarity of 0
-                task.setSimilarity(jaccardSimilarity);
-                result.add(task);
-                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-                System.out.println(task.getTaskDescribe() + task.getSimilarity());
-            }
         }
 
-        // sort by similarity
-        result.sort(Comparator.comparingDouble(Tasks::getSimilarity).reversed());
-
-        // get the top five
-        return result.subList(0, Math.min(3, result.size()));
+        return new AsyncResult<>(finalResponse);
     }
 }

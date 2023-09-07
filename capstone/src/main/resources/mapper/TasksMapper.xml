@@ -3,7 +3,7 @@
 <mapper namespace="com.usyd.capstone.mapper.TasksMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.usyd.capstone.entity.Tasks">
+    <resultMap id="BaseResultMap" type="com.usyd.capstone.entity.Task">
         <id column="task_id" property="taskId" />
         <result column="task_describe" property="taskDescribe" />
         <result column="task_image_url" property="taskImageUrl" />
