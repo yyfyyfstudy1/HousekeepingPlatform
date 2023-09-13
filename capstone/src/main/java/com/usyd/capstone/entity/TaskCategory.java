@@ -5,8 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -17,26 +15,21 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author yyf
- * @since 2023年08月15日
+ * @since 2023年09月09日
  */
-@Data
+@Getter
+@Setter
 @Accessors(chain = true)
-@TableName("task_tag")
-public class TaskTag implements Serializable {
+@TableName("task_category")
+public class TaskCategory implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "tag_ID", type = IdType.AUTO)
-    private Integer tagId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
 
-    @TableField("tag_Name")
-    private String tagName;
-
-    @TableField("tag_Creater")
-    private String tagCreater;
-
-    @TableField("category")
-    private String category;
+    @TableField("task_category")
+    private String taskCategory;
 
 
 }
