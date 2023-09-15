@@ -34,14 +34,29 @@ public class Task implements Serializable {
     @TableField("task_image_url")
     private String taskImageUrl;
 
-    @TableField("task_user_id")
-    private String taskUserId;
-
-    @TableField("task_signed_id")
-    private String taskSignedId;
-
     @TableField("task_label")
     private String taskLabel;
+
+    @TableField("category")
+    private Integer category;
+
+    @TableField("task_title")
+    private String taskTitle;
+
+    @TableField("task_salary")
+    private String taskSalary;
+
+    @TableField("task_user_id")
+    private Integer taskUserId;
+
+    @TableField("task_begin_time")
+    private Long taskBeginTime;
+
+    @TableField("task_estimated_duration")
+    private String taskEstimatedDuration;
+
+    @TableField("task_location")
+    private String taskLocation;
 
     @TableField(value = "Similarity", exist = false)
     private double Similarity;

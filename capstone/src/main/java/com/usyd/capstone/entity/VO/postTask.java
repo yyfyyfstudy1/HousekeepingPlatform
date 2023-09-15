@@ -8,6 +8,6 @@ import java.util.List;
 public class postTask {
     private String taskDescribe;
     private String taskImgURL;
-    private String taskUserID;
+    private Integer taskUserID;
     private List<String> taskLabel;
 }
