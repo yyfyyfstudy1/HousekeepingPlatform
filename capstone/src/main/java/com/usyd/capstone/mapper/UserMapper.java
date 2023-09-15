@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.Role;
 import com.usyd.capstone.entity.User;
+import com.usyd.capstone.entity.VO.ProfileUpdate;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -33,4 +35,6 @@ public interface UserMapper extends BaseMapper<User> {
     void createUserRoleById(Long userId, Integer roleId);
 
     List<User> finelec5619User();
+
+    Boolean updateProfile(ProfileUpdate profileUpdate);
 }
