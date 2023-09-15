@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.User;
 import com.usyd.capstone.entity.VO.EmailAddress;
+import com.usyd.capstone.entity.VO.ProfileUpdate;
 import com.usyd.capstone.entity.VO.UpdatePasswordParameter;
 import com.usyd.capstone.entity.VO.UserLogin;
 
@@ -35,4 +36,6 @@ public interface UserService extends IService<User> {
     Result updatePassword(UpdatePasswordParameter updatePasswordParameter);
 
     List<User> findAllUser();
+
+    Result updateProfile(ProfileUpdate profileUpdate);
 }

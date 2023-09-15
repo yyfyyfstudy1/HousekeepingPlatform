@@ -14,6 +14,7 @@ import com.usyd.capstone.entity.DTO.userUse;
 import com.usyd.capstone.entity.Role;
 import com.usyd.capstone.entity.User;
 import com.usyd.capstone.entity.VO.EmailAddress;
+import com.usyd.capstone.entity.VO.ProfileUpdate;
 import com.usyd.capstone.entity.VO.UpdatePasswordParameter;
 import com.usyd.capstone.entity.VO.UserLogin;
 import com.usyd.capstone.mapper.RoleMapper;
@@ -278,6 +279,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public List<User> findAllUser() {
 //        userMapper.selectList(new QueryWrapper<>());
         return userMapper.finelec5619User();
+    }
+
+    @Override
+    public Result updateProfile(ProfileUpdate profileUpdate) {
+        return Result.suc(userMapper.updateProfile(profileUpdate));
     }
 
 
