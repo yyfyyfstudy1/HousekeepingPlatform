@@ -72,8 +72,12 @@ public class NotificationServer {
      * 服务端发送消息给客户端
      */
     public static void sendMessage(String message, Integer userId) {
+
         try {
-            sessionMap.get(userId).getBasicRemote().sendText(message);
+            // 如果用户处于在线状态就进行推送
+            if (sessionMap.get(userId)!=null){
+                sessionMap.get(userId).getBasicRemote().sendText(message);
+            }
         } catch (Exception e) {
             log.error("服务端发送消息给客户端失败", e);
         }

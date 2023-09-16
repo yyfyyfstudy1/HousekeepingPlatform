@@ -4,6 +4,7 @@ package com.usyd.capstone.controller;
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.finalResponse;
 import com.usyd.capstone.entity.VO.TakeTask;
+import com.usyd.capstone.entity.VO.UserPhase;
 import com.usyd.capstone.entity.VO.requestDistribute;
 import com.usyd.capstone.service.TaskOngoingService;
 import com.usyd.capstone.service.TasksService;
@@ -45,9 +46,9 @@ public class LaborUserController {
         return Result.suc(result);
     }
     @PostMapping("/takeTask")
-    public Result takeTask(@RequestBody TakeTask takeTask){
+    public Result takeTask(@RequestBody UserPhase userPhase){
 
-        return taskOngoingService.updatePhaseByTaskId(takeTask);
+        return taskOngoingService.laborTakeTask(userPhase);
 
     }
 

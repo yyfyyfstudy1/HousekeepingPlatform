@@ -4,6 +4,7 @@ import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.Task;
 import com.usyd.capstone.entity.TaskOngoing;
 import com.usyd.capstone.entity.VO.TaskVO;
+import com.usyd.capstone.entity.VO.UserPhase;
 import com.usyd.capstone.service.TaskOngoingService;
 import com.usyd.capstone.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,13 @@ public class employerUserController {
 
     @Autowired
     private TaskOngoingService taskOngoingService;
+
+    @Value("${upload.dir}") // 从配置文件获取上传目录
+    private String uploadDir;
+
+    @Value("${image.Url}") // 从配置文件获取上传目录
+    private String imageUrl;
+
     @PostMapping("/postTask")
     public Result postTask(@RequestBody TaskVO taskVO){
         System.out.println(taskVO);
@@ -62,11 +70,6 @@ public class employerUserController {
 
     }
 
-    @Value("${upload.dir}") // 从配置文件获取上传目录
-    private String uploadDir;
-
-    @Value("${image.Url}") // 从配置文件获取上传目录
-    private String imageUrl;
 
     @PostMapping("/uploadImage")
     public Result uploadImage(@RequestParam("file") MultipartFile file) {
@@ -97,4 +100,11 @@ public class employerUserController {
             throw new RuntimeException(e);
         }
     }
+
+    @PostMapping("/employerConfirmTask")
+    public Result employerConfirmTask(@RequestBody UserPhase userPhase){
+     return   taskOngoingService.employerConfirmTask(userPhase);
+
+    }
+
 }

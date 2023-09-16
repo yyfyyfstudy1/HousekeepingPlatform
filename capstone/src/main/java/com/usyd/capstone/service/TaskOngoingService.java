@@ -4,6 +4,7 @@ import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.TaskOngoing;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.usyd.capstone.entity.VO.TakeTask;
+import com.usyd.capstone.entity.VO.UserPhase;
 
 /**
  * <p>
@@ -15,5 +16,7 @@ import com.usyd.capstone.entity.VO.TakeTask;
  */
 public interface TaskOngoingService extends IService<TaskOngoing> {
 
-    Result updatePhaseByTaskId(TakeTask takeTask);
+    Result laborTakeTask(UserPhase userPhase);
+
+    Result employerConfirmTask(UserPhase userPhase);
 }
