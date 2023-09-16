@@ -3,9 +3,9 @@ package com.usyd.capstone.controller;
 
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.finalResponse;
-import com.usyd.capstone.entity.Task;
-import com.usyd.capstone.entity.VO.postTask;
+import com.usyd.capstone.entity.VO.TakeTask;
 import com.usyd.capstone.entity.VO.requestDistribute;
+import com.usyd.capstone.service.TaskOngoingService;
 import com.usyd.capstone.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,10 +27,13 @@ import java.util.concurrent.ExecutionException;
  */
 @RestController
 @RequestMapping("/public/tasks")
-public class TasksController {
+public class LaborUserController {
 
     @Autowired
     private TasksService tasksService;
+
+    @Autowired
+    private TaskOngoingService taskOngoingService;
 
     @PostMapping("/getDistribute")
     public Result getDistribute(@RequestBody requestDistribute query) throws ExecutionException, InterruptedException {
@@ -41,22 +44,13 @@ public class TasksController {
 
         return Result.suc(result);
     }
+    @PostMapping("/takeTask")
+    public Result takeTask(@RequestBody TakeTask takeTask){
 
-    // customer post requirement
-    @PostMapping("/postTask")
-    public Result postTask(@RequestBody postTask task){
-        Task newTask = new Task();
-        newTask.setTaskDescribe(task.getTaskDescribe());
-        newTask.setTaskLabel(task.getTaskLabel().toString());
-        newTask.setTaskUserId(task.getTaskUserID());
-        newTask.setTaskImageUrl(task.getTaskImgURL());
-        boolean result = tasksService.save(newTask);
-        if (result){
-            return  Result.suc();
-        }else {
-            return Result.fail();
-        }
+        return taskOngoingService.updatePhaseByTaskId(takeTask);
+
     }
+
 
 
 }

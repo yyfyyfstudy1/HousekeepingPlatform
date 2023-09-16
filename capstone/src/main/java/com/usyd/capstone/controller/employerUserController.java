@@ -2,7 +2,9 @@ package com.usyd.capstone.controller;
 
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.Task;
+import com.usyd.capstone.entity.TaskOngoing;
 import com.usyd.capstone.entity.VO.TaskVO;
+import com.usyd.capstone.service.TaskOngoingService;
 import com.usyd.capstone.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,9 @@ import java.io.IOException;
 public class employerUserController {
     @Autowired
     private TasksService tasksService;
+
+    @Autowired
+    private TaskOngoingService taskOngoingService;
     @PostMapping("/postTask")
     public Result postTask(@RequestBody TaskVO taskVO){
         System.out.println(taskVO);
@@ -32,11 +37,25 @@ public class employerUserController {
         task.setTaskEstimatedDuration(taskVO.getDuration());
         task.setTaskImageUrl(taskVO.getImageUrl());
         task.setTaskLocation(taskVO.getLocation());
+        task.setTaskIsLocked(0);
+        task.setTaskIsFinished(0);
+        boolean result =  tasksService.save(task);
 
-       boolean result =  tasksService.save(task);
+        Integer id = task.getTaskId();  // 这里能够获取到数据库中生成的ID
 
-       if (result){
-           return Result.suc();
+        // save task to taskOngoing
+        TaskOngoing taskOngoing = new TaskOngoing();
+        taskOngoing.setTaskId(id);
+        taskOngoing.setTaskPhase(1);
+        taskOngoing.setEmployerId(taskVO.getUserID());
+
+        taskOngoing.setTaskBeginTime(taskVO.getTaskTimeStamp());
+
+        boolean result2 =  taskOngoingService.save(taskOngoing);
+
+
+       if (result && result2){
+           return Result.suc(id);
        }else {
            return Result.fail();
        }
