@@ -1,5 +1,7 @@
 package com.usyd.capstone.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.Task;
 import com.usyd.capstone.entity.TaskOngoing;
@@ -105,6 +107,29 @@ public class employerUserController {
     public Result employerConfirmTask(@RequestBody UserPhase userPhase){
      return   taskOngoingService.employerConfirmTask(userPhase);
 
+    }
+
+    @GetMapping("/getCurrentTaskPhase")
+    public Result getCurrentTaskPhase(@RequestParam Integer taskId){
+        TaskOngoing taskOngoing = taskOngoingService.getOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", taskId)
+        );
+
+        if (taskOngoing !=null){
+            return Result.suc(taskOngoing.getTaskPhase());
+        }else {
+            return Result.fail("get the task id faild");
+        }
+    }
+
+    @GetMapping("/getTaskDetailById")
+    public Result getTaskDetailById(@RequestParam Integer taskId){
+        Task task = tasksService.getById(taskId);
+        if (task !=null){
+            return Result.suc(task);
+        }else {
+            return Result.fail("get task detail fail");
+        }
     }
 
 }
