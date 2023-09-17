@@ -30,4 +30,11 @@ public class User {
 
     @TableField("forget_password_verity")
     private boolean forgetPasswordVerity;
+
+    @TableField("address")
+    private boolean address;
+
+    @TableField("introduction")
+    private boolean introduction;
+
 }
