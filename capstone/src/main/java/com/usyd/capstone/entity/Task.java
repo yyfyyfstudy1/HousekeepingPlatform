@@ -58,6 +58,13 @@ public class Task implements Serializable {
     @TableField("task_location")
     private String taskLocation;
 
+    @TableField("task_is_locked")
+    private Integer taskIsLocked;
+
+
+    @TableField("task_is_finished")
+    private Integer taskIsFinished;
+
     @TableField(value = "Similarity", exist = false)
     private double Similarity;
 }

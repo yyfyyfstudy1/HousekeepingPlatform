@@ -46,12 +46,12 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
         // get the top 3 of tag Similarity
         List<Task> taskGet = calculateSimilarityTopThree(tags);
 
-        int numberOfTasks = 3;
+        int numberOfTasks = taskGet.size();
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfTasks);
         List<Future<finalResponse>> futures = new ArrayList<>();
 
-        // 同时触发三个异步任务，并将Future对象添加到列表中
+        // 同时触发多个异步任务，并将Future对象添加到列表中
         for (int i = 0; i < numberOfTasks; i++) {
             int finalI = i;
             Future<finalResponse> future = executorService.submit(() -> performAsyncTask(cv, taskGet.get(finalI)).get());
