@@ -1,6 +1,7 @@
 package com.usyd.capstone.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.*;
 import com.usyd.capstone.entity.Task;
 import com.usyd.capstone.mapper.TasksMapper;
@@ -15,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -70,6 +70,11 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
         executorService.shutdown();
 
         return results;
+    }
+
+    @Override
+    public List<Task> getTaskByUserId(Integer userId) {
+        return tasksMapper.getTaskByUserId(userId);
     }
 
 

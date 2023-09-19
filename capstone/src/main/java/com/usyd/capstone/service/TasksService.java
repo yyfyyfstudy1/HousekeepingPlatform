@@ -1,5 +1,6 @@
 package com.usyd.capstone.service;
 
+import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.finalResponse;
 import com.usyd.capstone.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,4 +19,5 @@ import java.util.concurrent.ExecutionException;
 public interface TasksService extends IService<Task> {
 
     List<finalResponse> distribute(String cv, List<String> tags) throws ExecutionException, InterruptedException;
+    List<Task> getTaskByUserId(Integer userId);
 }
