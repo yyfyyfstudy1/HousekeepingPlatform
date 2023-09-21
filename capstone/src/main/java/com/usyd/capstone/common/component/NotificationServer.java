@@ -1,10 +1,7 @@
 package com.usyd.capstone.common.component;
 
-import cn.hutool.json.JSONArray;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.usyd.capstone.entity.MessageDB;
-import com.usyd.capstone.mapper.MessageMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

@@ -67,6 +67,17 @@ public class WebSocketServer {
     @OnClose
     public void onClose(Session session, @PathParam("userEmail") String userEmail) {
         sessionMap.remove(userEmail);
+
+        JSONObject result = new JSONObject();
+        JSONArray array = new JSONArray();
+        result.put("users", array);
+        for (Object key : sessionMap.keySet()) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("userEmail", key);
+            // {"userEmail", "zhang", "userEmail": "admin"}
+            array.add(jsonObject);
+        }
+        sendAllMessage(JSONUtil.toJsonStr(result));  // 后台发送消息给所有的客户端
         log.info("有一连接关闭，移除useruserEmail={}的用户session, 当前在线人数为：{}", userEmail, sessionMap.size());
     }
     /**
@@ -82,6 +93,14 @@ public class WebSocketServer {
         JSONObject obj = JSONUtil.parseObj(message);
         String toUserEmail = obj.getStr("to"); // to表示发送给哪个用户，比如 admin
         String text = obj.getStr("text"); // 发送的消息文本  hello
+        // 存入数据库
+        MessageMapper messageMapper = applicationContext.getBean(MessageMapper.class);
+        MessageDB messageDB = new MessageDB();
+        messageDB.setPostMessageContent(text);
+        messageDB.setFromUserEmail(userEmail);
+        messageDB.setToUserEmail(toUserEmail);
+        messageDB.setPostTime(System.currentTimeMillis());
+        messageMapper.insert(messageDB);
         // {"to": "admin", "text": "聊天文本"}
         Session toSession = sessionMap.get(toUserEmail); // 根据 to用户名来获取 session，再通过session发送消息文本
         if (toSession != null) {
@@ -92,18 +111,9 @@ public class WebSocketServer {
             jsonObject.put("text", text);  // text 同上面的text
             this.sendMessage(jsonObject.toString(), toSession);
 
-            MessageMapper messageMapper = applicationContext.getBean(MessageMapper.class);
-            // 存入数据库
-            MessageDB messageDB = new MessageDB();
-            messageDB.setPostMessageContent(text);
-            messageDB.setFromUserEmail(userEmail);
-            messageDB.setToUserEmail(toUserEmail);
-            messageDB.setPostTime(System.currentTimeMillis());
-            messageMapper.insert(messageDB);
-
             log.info("发送给用户userEmail={}，消息：{}", toUserEmail, jsonObject.toString());
         } else {
-            log.info("发送失败，未找到用户userEmail={}的session", toUserEmail);
+            log.info("发送失败，未找到用户userEmail={}的session，已经留言", toUserEmail);
         }
     }
     @OnError

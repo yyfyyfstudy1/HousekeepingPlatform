@@ -35,6 +35,13 @@ public class User {
     private boolean address;
 
     @TableField("introduction")
-    private boolean introduction;
+    private String introduction;
+
+
+    @TableField("age")
+    private Integer age;
+
+    @TableField("avatar_url")
+    private String avatarUrl;
 
 }

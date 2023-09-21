@@ -2,6 +2,7 @@ package com.usyd.capstone.mapper;
 
 import com.usyd.capstone.entity.TaskOngoing;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.usyd.capstone.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,4 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface TaskOngoingMapper extends BaseMapper<TaskOngoing> {
 
+    User getTaskerInfoByTaskerId(Integer taskId);
 }
