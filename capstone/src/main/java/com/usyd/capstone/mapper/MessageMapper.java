@@ -2,6 +2,7 @@ package com.usyd.capstone.mapper;
 
 import com.usyd.capstone.entity.MessageDB;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.usyd.capstone.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -18,4 +19,8 @@ import java.util.List;
 public interface MessageMapper extends BaseMapper<MessageDB> {
 
     List<MessageDB> selectAllRecordByTwoEmail(String email1, String email2);
+
+    List<User> getMatchTaskerInfo(Integer userId);
+
+    List<User> getMatchEmployerInfo(Integer userId);
 }

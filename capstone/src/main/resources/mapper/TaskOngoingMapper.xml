@@ -7,7 +7,7 @@
         <id column="id" property="id" />
         <result column="task_id" property="taskId" />
         <result column="laber_id" property="laberId" />
-        <result column="employee_id" property="employeeId" />
+        <result column="employee_id" property="employerId" />
         <result column="task_phase" property="taskPhase" />
         <result column="task_begin_time" property="taskBeginTime" />
         <result column="task_phase_update_time" property="taskPhaseUpdateTime" />
@@ -17,5 +17,10 @@
     <sql id="Base_Column_List">
         id, task_id, laber_id, employee_id, task_phase, task_begin_time, task_phase_update_time
     </sql>
+    <select id="getTaskerInfoByTaskerId" resultType="com.usyd.capstone.entity.User" parameterType="java.lang.Integer">
+        SELECT * FROM task_ongoing
+                          LEFT JOIN user ON task_ongoing.employer_id = user.id
+        WHERE task_id = #{taskId}
+    </select>
 
 </mapper>
