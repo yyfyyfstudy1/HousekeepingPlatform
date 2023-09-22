@@ -106,4 +106,76 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         }
         return Result.suc(user);
     }
+
+    @Override
+    public Result laborConfirmArrived(UserPhase userPhase) {
+        if (!userPhase.getUserRole().equals("labor")){
+            return Result.fail();
+        }
+        TaskOngoing taskOngoingOld = taskOngoingMapper.selectOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", userPhase.getTaskId())
+        );
+
+        // employer confirm the task, phase 4
+        taskOngoingOld.setTaskPhase(4);
+
+        // 获取当前时间戳
+        long timestamp = System.currentTimeMillis();
+        taskOngoingOld.setTaskPhaseUpdateTime(timestamp);
+
+        int i = taskOngoingMapper.updateById(taskOngoingOld);
+
+        if (i!=0){
+            Notification notification = new Notification();
+
+            notification.setTaskId(taskOngoingOld.getTaskId());
+            notification.setPhase(4);
+            notification.setStatus("ok");
+
+            String result = JSONObject.toJSONString(notification);
+
+            // send message to employer
+            NotificationServer.sendMessage(result, taskOngoingOld.getEmployerId());
+
+            return Result.suc("Labor has arrived");
+        }
+        return Result.fail();
+    }
+
+    @Override
+    public Result laborStopTask(UserPhase userPhase) {
+        if (!userPhase.getUserRole().equals("labor")){
+            return Result.fail();
+        }
+        TaskOngoing taskOngoingOld = taskOngoingMapper.selectOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", userPhase.getTaskId())
+        );
+
+        // employer confirm the task, phase 14
+        taskOngoingOld.setTaskPhase(14);
+
+        // 获取当前时间戳
+        long timestamp = System.currentTimeMillis();
+
+        // save work time
+       taskOngoingOld.setLaborWorkTime(timestamp - taskOngoingOld.getTaskPhaseUpdateTime());
+
+        int i = taskOngoingMapper.updateById(taskOngoingOld);
+
+        if (i!=0){
+            Notification notification = new Notification();
+
+            notification.setTaskId(taskOngoingOld.getTaskId());
+            notification.setPhase(14);
+            notification.setStatus("no");
+
+            String result = JSONObject.toJSONString(notification);
+
+            // send message to employer
+            NotificationServer.sendMessage(result, taskOngoingOld.getEmployerId());
+
+            return Result.suc("Labor is paused the task");
+        }
+        return Result.fail();
+    }
 }

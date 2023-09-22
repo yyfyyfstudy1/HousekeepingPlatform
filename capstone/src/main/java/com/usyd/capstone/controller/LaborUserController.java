@@ -55,6 +55,17 @@ public class LaborUserController {
         return taskOngoingService.getTaskerInfoByTaskId(taskId);
     }
 
+    @PostMapping("/laborConfirmArrived")
+    public Result employerConfirmTask(@RequestBody UserPhase userPhase){
+        return   taskOngoingService.laborConfirmArrived(userPhase);
+
+    }
+
+    @PostMapping("/laborStopTask")
+    public Result laborStopTask(@RequestBody UserPhase userPhase){
+        return   taskOngoingService.laborStopTask(userPhase);
+
+    }
 
 
 }
