@@ -27,4 +27,6 @@ public interface TaskOngoingService extends IService<TaskOngoing> {
     Result laborStopTask(UserPhase userPhase);
 
     Result laborRestartTask(UserPhase userPhase);
+
+    Result laborFinishedTask(UserPhase userPhase);
 }

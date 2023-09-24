@@ -73,7 +73,11 @@ public class LaborUserController {
 
     }
 
+    @PostMapping("/laborFinishedTask")
+    public Result laborFinishedTask(@RequestBody UserPhase userPhase){
+        return   taskOngoingService.laborFinishedTask(userPhase);
 
+    }
 
 }
 
