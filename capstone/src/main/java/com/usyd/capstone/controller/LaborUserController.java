@@ -67,6 +67,13 @@ public class LaborUserController {
 
     }
 
+    @PostMapping("/laborRestartTask")
+    public Result laborRestartTask(@RequestBody UserPhase userPhase){
+        return   taskOngoingService.laborRestartTask(userPhase);
+
+    }
+
+
 
 }
 
