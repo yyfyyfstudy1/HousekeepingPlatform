@@ -32,7 +32,7 @@ public class User {
     private boolean forgetPasswordVerity;
 
     @TableField("address")
-    private boolean address;
+    private String address;
 
     @TableField("introduction")
     private String introduction;

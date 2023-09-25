@@ -56,7 +56,10 @@
     <update id="updateProfile" parameterType="com.usyd.capstone.entity.User" >
         UPDATE User
         SET name = #{name},
-            phone = #{phone}
+            phone = #{phone},
+            address = #{address},
+            age = #{age},
+            introduction = #{introduction}
         WHERE 1=1 AND id = #{id}
     </update>
 
