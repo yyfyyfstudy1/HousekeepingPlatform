@@ -22,7 +22,7 @@ public class User {
 
     @TableField("resetting_password_timestamp")
     private long resettingPasswordTimestamp;
-
+ 
     private String email;
 
     @TableField("activation_status")

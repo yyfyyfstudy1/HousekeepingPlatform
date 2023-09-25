@@ -10,5 +10,4 @@ public class ProfileUpdate {
     private String age;
     private String introduction;
 //    private String avatarUrl;
-
 }

@@ -60,7 +60,7 @@
             address = #{address},
             age = #{age},
             introduction = #{introduction}
-        WHERE 1=1 AND id = #{id}
+        WHERE 1=1 AND id = #{id} 
     </update>
 
 
