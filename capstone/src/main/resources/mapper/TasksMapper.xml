@@ -15,5 +15,8 @@
     <sql id="Base_Column_List">
         task_id, task_describe, task_image_url, task_user_id, task_signed_id
     </sql>
+    <select id="getTaskByUserId" resultType="com.usyd.capstone.entity.Task">
+        select * from tasks WHERE 1=1 AND task_user_id = #{taskUserId};
+    </select>
 
 </mapper>
