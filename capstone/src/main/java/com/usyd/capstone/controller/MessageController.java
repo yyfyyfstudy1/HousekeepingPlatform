@@ -3,6 +3,7 @@ package com.usyd.capstone.controller;
 
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.MessageDB;
+import com.usyd.capstone.entity.VO.GetMatchUserInfo;
 import com.usyd.capstone.entity.VO.GetMessageHistory;
 import com.usyd.capstone.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,14 @@ public class MessageController {
         List<MessageDB> messagelist =  messageService.getMessageHistory(getMessageHistory.getEmail1(), getMessageHistory.getEmail2());
       return Result.suc(messagelist);
     }
+
+    @PostMapping("/chatRoom/getMatchUserInfo")
+    public Result getMatchUserInfo(@RequestBody GetMatchUserInfo getMatchUserInfo){
+
+        return messageService.getMatchUserInfo(getMatchUserInfo);
+
+    }
+
 
 
 }

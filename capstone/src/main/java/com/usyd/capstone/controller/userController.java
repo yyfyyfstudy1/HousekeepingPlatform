@@ -1,6 +1,8 @@
 package com.usyd.capstone.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.usyd.capstone.common.util.Result;
+import com.usyd.capstone.entity.User;
 import com.usyd.capstone.entity.VO.EmailAddress;
 import com.usyd.capstone.entity.VO.UpdatePasswordParameter;
 import com.usyd.capstone.entity.VO.UserLogin;
@@ -60,5 +62,11 @@ public class userController {
     public Result registrationVerification(@RequestParam("email") String email, @RequestParam("registrationTimestamp")
     long registrationTimestamp, @RequestParam("passwordToken") String passwordToken){
         return userService.registrationVerification(email, registrationTimestamp, passwordToken);
+    }
+
+    @GetMapping("/userInfo")
+    public Result showProfile(@RequestParam("email")  String email){
+        User user = userService.getOne(new QueryWrapper<User>().eq("email", email));
+        return Result.suc(user);
     }
 }

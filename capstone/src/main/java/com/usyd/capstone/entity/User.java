@@ -22,7 +22,7 @@ public class User {
 
     @TableField("resetting_password_timestamp")
     private long resettingPasswordTimestamp;
-
+ 
     private String email;
 
     @TableField("activation_status")
@@ -32,9 +32,16 @@ public class User {
     private boolean forgetPasswordVerity;
 
     @TableField("address")
-    private boolean address;
+    private String address;
 
     @TableField("introduction")
-    private boolean introduction;
+    private String introduction;
+
+
+    @TableField("age")
+    private Integer age;
+
+    @TableField("avatar_url")
+    private String avatarUrl;
 
 }

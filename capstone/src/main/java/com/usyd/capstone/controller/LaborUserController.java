@@ -1,19 +1,17 @@
 package com.usyd.capstone.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.finalResponse;
+import com.usyd.capstone.entity.TaskOngoing;
 import com.usyd.capstone.entity.VO.TakeTask;
 import com.usyd.capstone.entity.VO.UserPhase;
 import com.usyd.capstone.entity.VO.requestDistribute;
 import com.usyd.capstone.service.TaskOngoingService;
 import com.usyd.capstone.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -50,6 +48,11 @@ public class LaborUserController {
 
         return taskOngoingService.laborTakeTask(userPhase);
 
+    }
+
+    @GetMapping("/getTaskerInfo")
+    public Result getTaskInfo(@RequestParam("taskId") Integer taskId){
+        return taskOngoingService.getTaskerInfoByTaskId(taskId);
     }
 
 

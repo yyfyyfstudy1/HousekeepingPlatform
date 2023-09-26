@@ -7,6 +7,7 @@ import com.usyd.capstone.common.component.WebSocketServer;
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.Notification;
 import com.usyd.capstone.entity.TaskOngoing;
+import com.usyd.capstone.entity.User;
 import com.usyd.capstone.entity.VO.TakeTask;
 import com.usyd.capstone.entity.VO.UserPhase;
 import com.usyd.capstone.mapper.TaskOngoingMapper;
@@ -95,5 +96,14 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         }
         return Result.fail();
         
+    }
+
+    @Override
+    public Result getTaskerInfoByTaskId(Integer taskId) {
+        User user = taskOngoingMapper.getTaskerInfoByTaskerId(taskId);
+        if (user == null){
+            return Result.fail();
+        }
+        return Result.suc(user);
     }
 }
