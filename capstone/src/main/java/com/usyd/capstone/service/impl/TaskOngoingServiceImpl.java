@@ -48,16 +48,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
 
        int i = taskOngoingMapper.updateById(taskOngoingOld);
        if (i!=0){
-           Notification notification = new Notification();
-           // send message to employer {'taskId':'22', 'status':'ok'}
-           notification.setTaskId(taskOngoingOld.getTaskId());
-           notification.setPhase(2);
-           notification.setStatus("ok");
-
-            String result = JSONObject.toJSONString(notification);
-           NotificationServer.sendMessage(result, taskOngoingOld.getEmployerId());
-
-           return Result.suc("labor have take the task");
+           return sendNotification(taskOngoingOld.getTaskId(), 2, "ok", taskOngoingOld.getEmployerId(), "labor have take the task");
        }
        return Result.fail();
     }
@@ -81,18 +72,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         int i = taskOngoingMapper.updateById(taskOngoingOld);
 
         if (i!=0){
-            Notification notification = new Notification();
-            // send message to employer {'taskId':'22', 'status':'ok'}
-            notification.setTaskId(taskOngoingOld.getTaskId());
-            notification.setPhase(3);
-            notification.setStatus("ok");
-
-            String result = JSONObject.toJSONString(notification);
-
-            // send message to labor
-            NotificationServer.sendMessage(result, taskOngoingOld.getLaberId());
-
-            return Result.suc("employer has confirm the task");
+            return sendNotification(taskOngoingOld.getTaskId(), 3, "ok", taskOngoingOld.getLaberId(), "employer has confirm the task");
         }
         return Result.fail();
         
@@ -106,4 +86,125 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         }
         return Result.suc(user);
     }
+
+    @Override
+    public Result laborConfirmArrived(UserPhase userPhase) {
+        if (!userPhase.getUserRole().equals("labor")){
+            return Result.fail();
+        }
+        TaskOngoing taskOngoingOld = taskOngoingMapper.selectOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", userPhase.getTaskId())
+        );
+
+        // employer confirm the task, phase 4
+        taskOngoingOld.setTaskPhase(4);
+
+        // 获取当前时间戳
+        long timestamp = System.currentTimeMillis();
+        taskOngoingOld.setTaskPhaseUpdateTime(timestamp);
+
+        int i = taskOngoingMapper.updateById(taskOngoingOld);
+
+        if (i!=0){
+            return sendNotification(taskOngoingOld.getTaskId(), 4, "ok", taskOngoingOld.getEmployerId(), "Labor has arrived");
+        }
+        return Result.fail();
+    }
+
+
+    @Override
+    public Result laborStopTask(UserPhase userPhase) {
+        if (!userPhase.getUserRole().equals("labor")){
+            return Result.fail();
+        }
+        TaskOngoing taskOngoingOld = taskOngoingMapper.selectOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", userPhase.getTaskId())
+        );
+
+        // employer confirm the task, phase 14
+        taskOngoingOld.setTaskPhase(14);
+
+        // 获取当前时间戳
+        long timestamp = System.currentTimeMillis();
+
+        if (taskOngoingOld.getLaborWorkTime() == null){
+            taskOngoingOld.setLaborWorkTime(0L);
+        }
+        // save work time
+       taskOngoingOld.setLaborWorkTime(timestamp - taskOngoingOld.getTaskPhaseUpdateTime() + taskOngoingOld.getLaborWorkTime());
+
+        int i = taskOngoingMapper.updateById(taskOngoingOld);
+
+        if (i!=0){
+            return sendNotification(taskOngoingOld.getTaskId(), 14, "no", taskOngoingOld.getEmployerId(), "Labor is paused the task");
+        }
+        return Result.fail();
+    }
+
+    @Override
+    public Result laborRestartTask(UserPhase userPhase) {
+        if (!userPhase.getUserRole().equals("labor")){
+            return Result.fail();
+        }
+        TaskOngoing taskOngoingOld = taskOngoingMapper.selectOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", userPhase.getTaskId())
+        );
+
+        // employer confirm the task, phase 14
+        taskOngoingOld.setTaskPhase(4);
+
+        // 获取当前时间戳
+        long timestamp = System.currentTimeMillis();
+
+        // taskUpdateTime更新为restart的时间(当前时间)
+        taskOngoingOld.setTaskPhaseUpdateTime(timestamp);
+
+        int i = taskOngoingMapper.updateById(taskOngoingOld);
+
+        if (i!=0){
+            return sendNotification(taskOngoingOld.getTaskId(), 4, "no", taskOngoingOld.getEmployerId(), "Labor is restart the task");
+        }
+        return Result.fail();
+    }
+
+    @Override
+    public Result laborFinishedTask(UserPhase userPhase) {
+        if (!userPhase.getUserRole().equals("labor")){
+            return Result.fail();
+        }
+        TaskOngoing taskOngoingOld = taskOngoingMapper.selectOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", userPhase.getTaskId())
+        );
+
+        // employer confirm the task, phase 4
+        taskOngoingOld.setTaskPhase(5);
+
+        // 获取当前时间戳
+        long timestamp = System.currentTimeMillis();
+        taskOngoingOld.setTaskPhaseUpdateTime(timestamp);
+
+        int i = taskOngoingMapper.updateById(taskOngoingOld);
+
+        if (i!=0){
+            return sendNotification(taskOngoingOld.getTaskId(), 5, "ok", taskOngoingOld.getEmployerId(), "Labor has finished task");
+        }
+        return Result.fail();
+    }
+
+
+    private static Result sendNotification(int taskOngoingOldId, int phase, String ok, Integer taskOngoingOld1, String Labor_has_arrived) {
+        Notification notification = new Notification();
+
+        notification.setTaskId(taskOngoingOldId);
+        notification.setPhase(phase);
+        notification.setStatus(ok);
+
+        String result = JSONObject.toJSONString(notification);
+
+        // send message to employer
+        NotificationServer.sendMessage(result, taskOngoingOld1);
+
+        return Result.suc(Labor_has_arrived);
+    }
+
 }
