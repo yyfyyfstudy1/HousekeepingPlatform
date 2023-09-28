@@ -21,5 +21,5 @@ public interface TasksService extends IService<Task> {
     List<finalResponse> distribute(String cv, List<String> tags) throws ExecutionException, InterruptedException;
     List<Task> getPostedTaskByUserId(Integer userId);
 
-    List<Task> getTokenTaskByUserId(Integer userId);
+    List<Task> getTakenTaskByUserId(Integer userId);
 }

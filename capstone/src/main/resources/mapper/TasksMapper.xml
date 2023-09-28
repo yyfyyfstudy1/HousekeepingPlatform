@@ -17,6 +17,7 @@
     </sql>
     <select id="getPostedTaskByUserId" resultType="com.usyd.capstone.entity.Task">
         SELECT
+            t.task_id,
             t.task_title,
             t.task_salary,
             t.task_begin_time,
@@ -32,8 +33,9 @@
         WHERE
             1 = 1 and ongoing.employer_id = #{userId};
     </select>
-    <select id="getTokenTaskByUserId" resultType="com.usyd.capstone.entity.Task">
+    <select id="getTakenTaskByUserId" resultType="com.usyd.capstone.entity.Task">
         SELECT
+            t.task_id,
             t.task_title,
             t.task_salary,
             t.task_begin_time,
