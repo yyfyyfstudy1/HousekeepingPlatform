@@ -17,9 +17,9 @@ public class TaskController {
     public List<Task> showPostedTasks(@RequestParam("userId")  Integer userId){
         return tasksService.getPostedTaskByUserId(userId);
     }
-    @GetMapping("/myTokenTask")
+    @GetMapping("/myTakenTask")
     public List<Task> showTokenTasks(@RequestParam("userId")  Integer userId){
-        return tasksService.getTokenTaskByUserId(userId);
+        return tasksService.getTakenTaskByUserId(userId);
     }
 }
 
