@@ -15,8 +15,42 @@
     <sql id="Base_Column_List">
         task_id, task_describe, task_image_url, task_user_id, task_signed_id
     </sql>
-    <select id="getTaskByUserId" resultType="com.usyd.capstone.entity.Task">
-        select * from tasks WHERE 1=1 AND task_user_id = #{taskUserId};
+    <select id="getPostedTaskByUserId" resultType="com.usyd.capstone.entity.Task">
+        SELECT
+            t.task_title,
+            t.task_salary,
+            t.task_begin_time,
+            t.task_estimated_duration,
+            t.task_location,
+            ts.task_phase_describe
+        FROM
+            task_ongoing ongoing
+        JOIN
+            tasks t ON ongoing.task_id = t.task_id
+        JOIN
+            task_status ts ON ongoing.task_phase = ts.id
+        WHERE
+            1 = 1 and ongoing.employer_id = #{userId};
+    </select>
+    <select id="getTokenTaskByUserId" resultType="com.usyd.capstone.entity.Task">
+        SELECT
+            t.task_title,
+            t.task_salary,
+            t.task_begin_time,
+            t.task_estimated_duration,
+            t.task_location,
+            u.name,
+            ts.task_phase_describe
+        FROM
+            task_ongoing ongoing
+        JOIN
+            tasks t ON ongoing.task_id = t.task_id
+        JOIN
+            user u ON ongoing.laber_id = u.id
+        JOIN
+            task_status ts ON ongoing.task_phase = ts.id
+        WHERE
+            1 = 1 and ongoing.employer_id = #{userId};
     </select>
 
 </mapper>

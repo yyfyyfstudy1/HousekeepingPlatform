@@ -17,5 +17,6 @@ import java.util.List;
 @Mapper
 public interface TasksMapper extends BaseMapper<Task> {
 
-    List<Task> getTaskByUserId(Integer userId);
+    List<Task> getPostedTaskByUserId(Integer userId);
+    List<Task> getTokenTaskByUserId(Integer userId);
 }

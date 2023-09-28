@@ -67,4 +67,10 @@ public class Task implements Serializable {
 
     @TableField(value = "Similarity", exist = false)
     private double Similarity;
+
+    @TableField("task_phase_describe")
+    private String taskPhaseDescribe;
+
+    @TableField("name")
+    private String name;
 }
