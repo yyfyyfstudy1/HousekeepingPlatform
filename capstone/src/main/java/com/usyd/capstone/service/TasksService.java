@@ -19,5 +19,7 @@ import java.util.concurrent.ExecutionException;
 public interface TasksService extends IService<Task> {
 
     List<finalResponse> distribute(String cv, List<String> tags) throws ExecutionException, InterruptedException;
-    List<Task> getTaskByUserId(Integer userId);
+    List<Task> getPostedTaskByUserId(Integer userId);
+
+    List<Task> getTokenTaskByUserId(Integer userId);
 }

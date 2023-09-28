@@ -5,7 +5,6 @@ import com.usyd.capstone.entity.Task;
 import com.usyd.capstone.service.TasksService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -15,12 +14,12 @@ public class TaskController {
     private TasksService tasksService;
 
     @GetMapping("/myTask")
-    public List<Task> showTasks(@RequestParam("taskUserId")  Integer userId){
-        return tasksService.getTaskByUserId(userId);
+    public List<Task> showPostedTasks(@RequestParam("userId")  Integer userId){
+        return tasksService.getPostedTaskByUserId(userId);
     }
-    @GetMapping("/List")
-    public List<Task> list(){
-        return tasksService.list();
+    @GetMapping("/myTokenTask")
+    public List<Task> showTokenTasks(@RequestParam("userId")  Integer userId){
+        return tasksService.getTokenTaskByUserId(userId);
     }
 }
 

@@ -73,10 +73,14 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
     }
 
     @Override
-    public List<Task> getTaskByUserId(Integer userId) {
-        return tasksMapper.getTaskByUserId(userId);
+    public List<Task> getPostedTaskByUserId(Integer userId) {
+        return tasksMapper.getPostedTaskByUserId(userId);
     }
 
+    @Override
+    public List<Task> getTokenTaskByUserId(Integer userId) {
+        return tasksMapper.getTokenTaskByUserId(userId);
+    }
 
     private List<Task> calculateSimilarityTopThree(List<String> tags){
         List<Task> taskGet = tasksMapper.selectList(null);
