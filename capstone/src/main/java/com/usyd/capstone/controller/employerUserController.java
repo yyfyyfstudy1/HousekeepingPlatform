@@ -130,4 +130,16 @@ public class employerUserController {
         }
     }
 
+    @GetMapping("/getTaskPhaseFourBeginTime")
+    public Result getTaskPhaseFourBeginTime(@RequestParam Integer taskId){
+        TaskOngoing task = taskOngoingService.getOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", taskId)
+        );
+        if (task !=null){
+            return Result.suc(task);
+        }else {
+            return Result.fail("get task fail");
+        }
+    }
+
 }

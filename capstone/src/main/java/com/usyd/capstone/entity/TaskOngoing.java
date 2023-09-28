@@ -46,5 +46,7 @@ public class TaskOngoing implements Serializable {
     @TableField("task_phase_update_time")
     private Long taskPhaseUpdateTime;
 
+    @TableField("labor_work_time")
+    private Long laborWorkTime;
 
 }
