@@ -48,11 +48,11 @@
         JOIN
             tasks t ON ongoing.task_id = t.task_id
         JOIN
-            user u ON ongoing.laber_id = u.id
+            user u ON ongoing.labor_id = u.id
         JOIN
             task_status ts ON ongoing.task_phase = ts.id
         WHERE
-            1 = 1 and ongoing.employer_id = #{userId};
+            1 = 1 and ongoing.labor_id = #{userId};
     </select>
 
 </mapper>

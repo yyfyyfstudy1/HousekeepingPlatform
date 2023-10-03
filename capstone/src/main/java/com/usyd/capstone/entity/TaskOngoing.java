@@ -31,8 +31,8 @@ public class TaskOngoing implements Serializable {
     @TableField("task_id")
     private Integer taskId;
 
-    @TableField("laber_id")
-    private Integer laberId;
+    @TableField("labor_id")
+    private Integer laborId;
 
     @TableField("employer_id")
     private Integer employerId;

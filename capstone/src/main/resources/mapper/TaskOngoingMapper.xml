@@ -6,7 +6,7 @@
     <resultMap id="BaseResultMap" type="com.usyd.capstone.entity.TaskOngoing">
         <id column="id" property="id" />
         <result column="task_id" property="taskId" />
-        <result column="laber_id" property="laberId" />
+        <result column="labor_id" property="laborId" />
         <result column="employee_id" property="employerId" />
         <result column="task_phase" property="taskPhase" />
         <result column="task_begin_time" property="taskBeginTime" />
@@ -15,7 +15,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, task_id, laber_id, employee_id, task_phase, task_begin_time, task_phase_update_time
+        id, task_id, labor_id, employee_id, task_phase, task_begin_time, task_phase_update_time
     </sql>
     <select id="getTaskerInfoByTaskerId" resultType="com.usyd.capstone.entity.User" parameterType="java.lang.Integer">
         SELECT * FROM task_ongoing
