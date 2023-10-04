@@ -9,6 +9,7 @@
         <result column="task_image_url" property="taskImageUrl" />
         <result column="task_user_id" property="taskUserId" />
         <result column="task_signed_id" property="taskSignedId" />
+        <result column="task_salary" property="taskSalary" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -53,6 +54,14 @@
             task_status ts ON ongoing.task_phase = ts.id
         WHERE
             1 = 1 and ongoing.employer_id = #{userId};
+    </select>
+    <select id="findSalaryById" resultType="com.usyd.capstone.entity.Task">
+        SELECT
+            tasks.task_salary
+        FROM
+            tasks
+        WHERE
+            tasks.task_id = #{taskId};
     </select>
 
 </mapper>
