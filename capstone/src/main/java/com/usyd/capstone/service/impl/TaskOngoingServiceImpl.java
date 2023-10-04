@@ -40,7 +40,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
 
         // labor have take the order, phase 2
         taskOngoingOld.setTaskPhase(2);
-        taskOngoingOld.setLaberId(userPhase.getUserId());
+        taskOngoingOld.setLaborId(userPhase.getUserId());
 
         // 获取当前时间戳
         long timestamp = System.currentTimeMillis();
@@ -72,7 +72,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         int i = taskOngoingMapper.updateById(taskOngoingOld);
 
         if (i!=0){
-            return sendNotification(taskOngoingOld.getTaskId(), 3, "ok", taskOngoingOld.getLaberId(), "employer has confirm the task");
+            return sendNotification(taskOngoingOld.getTaskId(), 3, "ok", taskOngoingOld.getLaborId(), "employer has confirm the task");
         }
         return Result.fail();
         
