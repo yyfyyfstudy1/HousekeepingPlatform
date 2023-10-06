@@ -54,5 +54,19 @@
         WHERE
             1 = 1 and ongoing.labor_id = #{userId};
     </select>
+    <select id="getEmployerTimeTableByUserID" resultType="com.usyd.capstone.entity.Task">
+        SELECT *
+        FROM tasks
+                 LEFT JOIN task_ongoing ON tasks.task_id = task_ongoing.task_id
+        WHERE task_ongoing.employer_id = #{userId}
+          AND tasks.task_is_finished = 0
+    </select>
+    <select id="getLaborTimeTableByUserID" resultType="com.usyd.capstone.entity.Task">
+        SELECT *
+        FROM tasks
+                 LEFT JOIN task_ongoing ON tasks.task_id = task_ongoing.task_id
+        WHERE task_ongoing.labor_id = #{userId}
+          AND tasks.task_is_finished = 0
+    </select>
 
 </mapper>
