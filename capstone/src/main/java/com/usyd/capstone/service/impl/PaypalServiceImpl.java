@@ -5,6 +5,7 @@ import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
 import com.usyd.capstone.common.Enums.PaypalPaymentIntent;
 import com.usyd.capstone.common.Enums.PaypalPaymentMethod;
+import com.usyd.capstone.entity.Task;
 import com.usyd.capstone.mapper.TasksMapper;
 import com.usyd.capstone.service.PaypalService;
 import lombok.SneakyThrows;
@@ -32,15 +33,18 @@ public class PaypalServiceImpl implements PaypalService {
     public Payment createPayment(Integer taskId, String cancelUrl, String successUrl) {
         //1、根据taskId查询task信息，获取task 金额
         //total应为查询出来的task金额，此处仅为示例，防止编译报错
-        BigDecimal total = new BigDecimal("");
+        BigDecimal total = new BigDecimal("25");
+        System.out.println(taskId);
         //todo
-        if(tasksMapper.findSalaryById(taskId)!=null){
-        total = tasksMapper.findSalaryById(taskId);
+
+
+
+        if(tasksMapper.selectById(taskId)!=null){
+            Task task = tasksMapper.selectById(taskId);
+        total = new BigDecimal(task.getTaskSalary());
         }
         //2、执行创建支付
         Payment payment = createPayment(total, "USD", cancelUrl, successUrl);
-        log.info("支付完成:{}", JSON.toJSONString(payment));
-        //3、更新task状态 为“已完结”
         //todo
 
         return payment;
@@ -97,6 +101,7 @@ public class PaypalServiceImpl implements PaypalService {
         amountDetails.setCurrency(currency);
         amountDetails.setTotal(String.format("%.2f", total));
         transaction.setAmount(amountDetails);
+        transactions.add(transaction);
         payment.setTransactions(transactions);
 
 

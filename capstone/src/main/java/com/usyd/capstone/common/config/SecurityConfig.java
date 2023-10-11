@@ -25,6 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/public/**").permitAll() // 公开访问的API
                 .antMatchers("/user/**").permitAll()
+                .antMatchers("/paypal/**").permitAll()
                 // 放行所有的websocket请求
                 .antMatchers("/imserver/**").permitAll()
                 .antMatchers("/notification/**").permitAll()

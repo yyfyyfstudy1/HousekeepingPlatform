@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class PaypalController {
 
-    public static final String PAYPAL_SUCCESS_URL = "pay/success";
-    public static final String PAYPAL_CANCEL_URL = "pay/cancel";
+    public static final String PAYPAL_SUCCESS_URL = "/success";
+    public static final String PAYPAL_CANCEL_URL = "/cancel";
 
     @Resource
     private PaypalService paypalService;
@@ -30,18 +30,19 @@ public class PaypalController {
      * @return
      */
     @PostMapping("/pay")
-    public String pay(Integer taskId, HttpServletRequest request){
+    public String pay(@RequestParam(name="taskId", required = false, defaultValue = "77") Integer taskId, HttpServletRequest request){
         //
-        String cancelUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_CANCEL_URL;
-        String successUrl = URLUtils.getBaseURl(request) + "/" + PAYPAL_SUCCESS_URL;
+        String cancelUrl = URLUtils.getBaseURl(request) + "/paypal" + PAYPAL_CANCEL_URL;
+        String successUrl = URLUtils.getBaseURl(request) + "/paypal" + PAYPAL_SUCCESS_URL;
+        System.out.println(taskId);
 
         //调用交易方法
         Payment payment = paypalService.createPayment(taskId, cancelUrl, successUrl);
-        log.info("执行结果： payment:{}", JSON.toJSONString(payment));
+        //log.info("执行结果： payment:{}", JSON.toJSONString(payment));
         //交易成功后，跳转反馈地址
         for(Links links : payment.getLinks()){
             if(links.getRel().equals("approval_url")){
-                return "redirect:" + links.getHref();
+                return  links.getHref();
             }
         }
         return "redirect:/";
