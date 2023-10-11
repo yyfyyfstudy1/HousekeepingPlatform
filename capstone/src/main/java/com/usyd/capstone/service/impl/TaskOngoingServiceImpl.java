@@ -191,6 +191,27 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         return Result.fail();
     }
 
+    @Override
+    public void employerPaymentSuccessful(Integer taskId) {
+        TaskOngoing taskOngoingOld = taskOngoingMapper.selectOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", taskId)
+        );
+
+        // employer payment succesful, phase 6
+        taskOngoingOld.setTaskPhase(6);
+
+        // 获取当前时间戳
+        long timestamp = System.currentTimeMillis();
+        taskOngoingOld.setTaskPhaseUpdateTime(timestamp);
+
+        int i = taskOngoingMapper.updateById(taskOngoingOld);
+
+        if (i!=0){
+            sendNotification(taskOngoingOld.getTaskId(), 6, "ok", taskOngoingOld.getLaborId(), "employer has finished payment");
+        }
+
+    }
+
 
     private static Result sendNotification(int taskOngoingOldId, int phase, String ok, Integer taskOngoingOld1, String Labor_has_arrived) {
         Notification notification = new Notification();

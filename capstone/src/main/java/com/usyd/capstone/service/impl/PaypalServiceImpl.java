@@ -38,7 +38,6 @@ public class PaypalServiceImpl implements PaypalService {
         //todo
 
 
-
         if(tasksMapper.selectById(taskId)!=null){
             Task task = tasksMapper.selectById(taskId);
         total = new BigDecimal(task.getTaskSalary());

@@ -24,14 +24,14 @@
     <select id="getMatchTaskerInfo" resultType="com.usyd.capstone.entity.User">
         SELECT *
         FROM task_ongoing
-                 LEFT JOIN user ON task_ongoing.laber_id = user.id
+                 LEFT JOIN user ON task_ongoing.labor_id = user.id
         WHERE task_ongoing.employer_id = #{userId}
     </select>
     <select id="getMatchEmployerInfo" resultType="com.usyd.capstone.entity.User">
         SELECT *
         FROM task_ongoing
                  LEFT JOIN user ON task_ongoing.employer_id = user.id
-        WHERE task_ongoing.laber_id = #{userId}
+        WHERE task_ongoing.labor_id = #{userId}
     </select>
 
 </mapper>
