@@ -40,3 +40,8 @@ spring:
         smtp:
           auth: true
           starttls.enable: true
+Paypal:
+    mode: sandbox
+    client:
+      app: AYGExS-fK1EKIhc3GikZm5u3iq9wv4rqm1Uo9dW1xiznclltkAEntbskJly4-natWWK2sEqtpHejkKSu
+      secret: EPa5YgUlJmFHo1XzP1YfulWpi3Zq18VK-VAAgroNwGgERc-qJd5J5KhQdXOuTOs1im9ZHTXxmcgN-mb3

@@ -26,7 +26,8 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         String requestUrl = request.getRequestURI();
 
         // 放行接口
-        if (requestUrl.endsWith("/login") || requestUrl.startsWith("/public") || requestUrl.startsWith("/imserver")) {
+        if (requestUrl.endsWith("/login") || requestUrl.startsWith("/public") || requestUrl.startsWith("/imserver")
+                || requestUrl.startsWith("/paypal")) {
             chain.doFilter(request, response);
             return;
         }

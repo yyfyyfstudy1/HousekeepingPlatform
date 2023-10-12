@@ -1,10 +1,10 @@
 package com.usyd.capstone.mapper;
 
-import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.Task;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -24,4 +24,6 @@ public interface TasksMapper extends BaseMapper<Task> {
     List<Task> getEmployerTimeTableByUserID(Integer userId);
 
     List<Task> getLaborTimeTableByUserID(Integer userId);
+
+    BigDecimal findSalaryById(Integer taskid);
 }

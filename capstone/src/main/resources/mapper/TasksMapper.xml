@@ -68,5 +68,13 @@
         WHERE task_ongoing.labor_id = #{userId}
           AND tasks.task_is_finished = 0
     </select>
+    <select id="findSalaryById" resultType="com.usyd.capstone.entity.Task">
+        SELECT
+            tasks.task_salary
+        FROM
+            tasks
+        WHERE
+            tasks.task_id = #{taskId};
+    </select>
 
 </mapper>
