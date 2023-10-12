@@ -9,7 +9,6 @@
         <result column="task_image_url" property="taskImageUrl" />
         <result column="task_user_id" property="taskUserId" />
         <result column="task_signed_id" property="taskSignedId" />
-        <result column="task_salary" property="taskSalary" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -54,6 +53,20 @@
             task_status ts ON ongoing.task_phase = ts.id
         WHERE
             1 = 1 and ongoing.labor_id = #{userId};
+    </select>
+    <select id="getEmployerTimeTableByUserID" resultType="com.usyd.capstone.entity.Task">
+        SELECT *
+        FROM tasks
+                 LEFT JOIN task_ongoing ON tasks.task_id = task_ongoing.task_id
+        WHERE task_ongoing.employer_id = #{userId}
+          AND tasks.task_is_finished = 0
+    </select>
+    <select id="getLaborTimeTableByUserID" resultType="com.usyd.capstone.entity.Task">
+        SELECT *
+        FROM tasks
+                 LEFT JOIN task_ongoing ON tasks.task_id = task_ongoing.task_id
+        WHERE task_ongoing.labor_id = #{userId}
+          AND tasks.task_is_finished = 0
     </select>
     <select id="findSalaryById" resultType="com.usyd.capstone.entity.Task">
         SELECT

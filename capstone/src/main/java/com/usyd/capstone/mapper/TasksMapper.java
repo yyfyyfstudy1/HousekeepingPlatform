@@ -20,5 +20,10 @@ public interface TasksMapper extends BaseMapper<Task> {
 
     List<Task> getPostedTaskByUserId(Integer userId);
     List<Task> getTakenTaskByUserId(Integer userId);
+
+    List<Task> getEmployerTimeTableByUserID(Integer userId);
+
+    List<Task> getLaborTimeTableByUserID(Integer userId);
+
     BigDecimal findSalaryById(Integer taskid);
 }

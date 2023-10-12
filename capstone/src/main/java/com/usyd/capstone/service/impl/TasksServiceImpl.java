@@ -1,6 +1,7 @@
 package com.usyd.capstone.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.*;
 import com.usyd.capstone.entity.Task;
@@ -41,10 +42,14 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
 
     private final String chatGptApiUrl = "https://api.openai.com/v1/chat/completions"; // ChatGPT API URL
     @Override
-    public List<finalResponse> distribute(String cv, List<String> tags) throws ExecutionException, InterruptedException {
+    public List<finalResponse> distribute(String cv, List<String> tags, Integer userId) throws ExecutionException, InterruptedException {
 
         // get the top 3 of tag Similarity
-        List<Task> taskGet = calculateSimilarityTopThree(tags);
+        List<Task> taskGet = calculateSimilarityTopThree(tags, userId);
+        if (taskGet == null){
+            // 没算出三个任务就返回空
+            return null;
+        }
 
         int numberOfTasks = taskGet.size();
 
@@ -82,8 +87,15 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
         return tasksMapper.getTakenTaskByUserId(userId);
     }
 
-    private List<Task> calculateSimilarityTopThree(List<String> tags){
-        List<Task> taskGet = tasksMapper.selectList(null);
+    // 查询并且计算task，推送task
+    private List<Task> calculateSimilarityTopThree(List<String> tags, Integer userId){
+        List<Task> taskGet = tasksMapper.selectList(
+                new QueryWrapper<Task>().ne("task_user_id", userId)
+        );
+
+        if (taskGet.isEmpty()){
+            return null;
+        }
         List<Task> result = new ArrayList<>();
 
         for (Task task : taskGet) {
@@ -99,6 +111,9 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
             }
         }
 
+        if (result.isEmpty()){
+            return null;
+        }
         // sort by similarity
         result.sort(Comparator.comparingDouble(Task::getSimilarity).reversed());
 
@@ -161,5 +176,22 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
         }
 
         return new AsyncResult<>(finalResponse);
+    }
+
+    @Override
+    public Result getTimeTableByUserID(Integer userId, Integer userType) {
+        // 1 employer, 2 labor
+        if (userType == 1){
+            if (tasksMapper.getEmployerTimeTableByUserID(userId) !=null){
+                return Result.suc(tasksMapper.getEmployerTimeTableByUserID(userId));
+            }
+        }else {
+            if (tasksMapper.getLaborTimeTableByUserID(userId) !=null){
+                return Result.suc(tasksMapper.getLaborTimeTableByUserID(userId));
+            }
+        }
+
+        return Result.fail("service error");
+
     }
 }

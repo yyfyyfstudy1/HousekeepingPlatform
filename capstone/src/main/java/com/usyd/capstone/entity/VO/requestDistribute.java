@@ -9,4 +9,6 @@ public class requestDistribute {
     public String CV;
 
     public List<String> tags;
+
+    public Integer userId;
 }
