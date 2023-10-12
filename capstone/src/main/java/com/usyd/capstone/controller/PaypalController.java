@@ -42,12 +42,13 @@ public class PaypalController {
     public String pay(@RequestBody TaskIdVO taskIdVO, HttpServletRequest request){
 
         Integer taskId = taskIdVO.getTaskId();
+        Long taskDuration = taskIdVO.getTaskDuration();
 
         String cancelUrl = URLUtils.getBaseURl(request) + "/paypal" + PAYPAL_CANCEL_URL;
         String successUrl = URLUtils.getBaseURl(request) + "/paypal" + PAYPAL_SUCCESS_URL + "?taskId=" + taskId;
 
         //调用交易方法
-        Payment payment = paypalService.createPayment(taskId, cancelUrl, successUrl);
+        Payment payment = paypalService.createPayment(taskId, cancelUrl, successUrl, taskDuration);
         //log.info("执行结果： payment:{}", JSON.toJSONString(payment));
 
         for(Links links : payment.getLinks()){
