@@ -11,4 +11,7 @@ public class requestDistribute {
     public List<String> tags;
 
     public Integer userId;
+
+    // 如果是刷新任务就传递这个参数
+    public List<Integer> taskIDList;
 }

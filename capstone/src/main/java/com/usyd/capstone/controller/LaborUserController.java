@@ -37,8 +37,14 @@ public class LaborUserController {
     @PostMapping("/getDistribute")
     public Result getDistribute(@RequestBody requestDistribute query) throws ExecutionException, InterruptedException {
 
+        List<finalResponse> result;
+        if (query.getTaskIDList() !=null){
 
-        List<finalResponse> result = tasksService.distribute(query.getCV(), query.getTags(), query.getUserId());
+            result = tasksService.distribute(query.getCV(), query.getTags(), query.getUserId(), query.getTaskIDList());
+        }else {
+           result = tasksService.distribute(query.getCV(), query.getTags(), query.getUserId(), null);
+        }
+
 
         if (result == null){
             return Result.fail("No matching work");
@@ -46,6 +52,8 @@ public class LaborUserController {
 
         return Result.suc(result);
     }
+
+
     @PostMapping("/takeTask")
     public Result takeTask(@RequestBody UserPhase userPhase){
 
