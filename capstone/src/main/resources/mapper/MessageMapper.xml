@@ -24,7 +24,7 @@
     <select id="getMatchTaskerInfo" resultType="com.usyd.capstone.entity.User">
         SELECT *
         FROM task_ongoing
-                 LEFT JOIN user ON task_ongoing.labor_id = user.id
+                JOIN user ON task_ongoing.labor_id = user.id
         WHERE task_ongoing.employer_id = #{userId}
         GROUP BY user.id
     </select>
