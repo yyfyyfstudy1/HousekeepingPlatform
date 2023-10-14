@@ -30,17 +30,18 @@ public class PaypalServiceImpl implements PaypalService {
     private TasksMapper tasksMapper;
 
     @Override
-    public Payment createPayment(Integer taskId, String cancelUrl, String successUrl) {
+    public Payment createPayment(Integer taskId, String cancelUrl, String successUrl, Long taskDuration) {
         //1、根据taskId查询task信息，获取task 金额
         //total应为查询出来的task金额，此处仅为示例，防止编译报错
-        BigDecimal total = new BigDecimal("25");
+        BigDecimal total = new BigDecimal(0);
         System.out.println(taskId);
         //todo
 
 
         if(tasksMapper.selectById(taskId)!=null){
             Task task = tasksMapper.selectById(taskId);
-        total = new BigDecimal(task.getTaskSalary());
+            BigDecimal hourlyRate = new BigDecimal(task.getTaskSalary());
+            total = calculateSalary(taskDuration, hourlyRate);
         }
         //2、执行创建支付
         Payment payment = createPayment(total, "USD", cancelUrl, successUrl);
@@ -110,6 +111,19 @@ public class PaypalServiceImpl implements PaypalService {
         redirectUrls.setCancelUrl(cancelUrl);
         payment.setRedirectUrls(redirectUrls);
         return payment.create(apiContext);
+    }
+
+    /**
+     *
+     * @param milliseconds
+     * @param hourlyRate
+     * @return 总工资
+     */
+    public BigDecimal calculateSalary(Long milliseconds, BigDecimal hourlyRate) {
+        // 1 hour = 3600000 milliseconds
+        BigDecimal hoursWorked = new BigDecimal(milliseconds).divide(new BigDecimal(3600000), 10, BigDecimal.ROUND_HALF_UP); // Increase precision here
+
+        return hourlyRate.multiply(hoursWorked).setScale(2, BigDecimal.ROUND_HALF_UP); // Rounding the final result to 2 decimal places
     }
 
 }

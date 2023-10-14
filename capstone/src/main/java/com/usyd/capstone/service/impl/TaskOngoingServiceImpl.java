@@ -181,6 +181,16 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
 
         // 获取当前时间戳
         long timestamp = System.currentTimeMillis();
+
+        // 保存工作时间
+        if (taskOngoingOld.getLaborWorkTime() !=null){
+            taskOngoingOld.setLaborWorkTime(timestamp - taskOngoingOld.getTaskPhaseUpdateTime() + taskOngoingOld.getLaborWorkTime());
+        }else {
+            taskOngoingOld.setLaborWorkTime(timestamp - taskOngoingOld.getTaskPhaseUpdateTime());
+        }
+
+
+
         taskOngoingOld.setTaskPhaseUpdateTime(timestamp);
 
         int i = taskOngoingMapper.updateById(taskOngoingOld);

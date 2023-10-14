@@ -4,6 +4,7 @@ import com.usyd.capstone.common.util.Result;
 import com.usyd.capstone.entity.DTO.finalResponse;
 import com.usyd.capstone.entity.Task;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.sonatype.inject.Nullable;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -18,7 +19,7 @@ import java.util.concurrent.ExecutionException;
  */
 public interface TasksService extends IService<Task> {
 
-    List<finalResponse> distribute(String cv, List<String> tags, Integer userId) throws ExecutionException, InterruptedException;
+    List<finalResponse> distribute(String cv, List<String> tags, Integer userId, @Nullable List<Integer> taskIDlist) throws ExecutionException, InterruptedException;
     List<Task> getPostedTaskByUserId(Integer userId);
 
     List<Task> getTakenTaskByUserId(Integer userId);

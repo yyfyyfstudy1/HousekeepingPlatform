@@ -28,5 +28,15 @@ public class TaskTagController {
         return Result.suc(taskTagService.list(new QueryWrapper<TaskTag>().eq("category", category)));
     }
 
+
+    @PostMapping("/addTag")
+    public Result getTags(@RequestBody TaskTag taskTag){
+
+        taskTagService.save(taskTag);
+        Integer generatedId = taskTag.getTagId();
+
+        return Result.suc(generatedId);
+    }
+
 }
 

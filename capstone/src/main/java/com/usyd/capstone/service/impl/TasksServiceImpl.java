@@ -8,6 +8,7 @@ import com.usyd.capstone.entity.Task;
 import com.usyd.capstone.mapper.TasksMapper;
 import com.usyd.capstone.service.TasksService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.sonatype.inject.Nullable;
 import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
@@ -42,12 +43,18 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
 
     private final String chatGptApiUrl = "https://api.openai.com/v1/chat/completions"; // ChatGPT API URL
     @Override
-    public List<finalResponse> distribute(String cv, List<String> tags, Integer userId) throws ExecutionException, InterruptedException {
+    public List<finalResponse> distribute(String cv, List<String> tags, Integer userId, @Nullable List<Integer> taskIDlist) throws ExecutionException, InterruptedException {
 
         // get the top 3 of tag Similarity
-        List<Task> taskGet = calculateSimilarityTopThree(tags, userId);
+        List<Task> taskGet;
+        if (taskIDlist!=null){
+            taskGet = calculateSimilarityTopTwo(tags, userId, taskIDlist);
+        }else {
+            taskGet = calculateSimilarityTopTwo(tags, userId, null);
+        }
+
         if (taskGet == null){
-            // 没算出三个任务就返回空
+            // 没算出两个任务就返回空
             return null;
         }
 
@@ -88,10 +95,18 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
     }
 
     // 查询并且计算task，推送task
-    private List<Task> calculateSimilarityTopThree(List<String> tags, Integer userId){
-        List<Task> taskGet = tasksMapper.selectList(
-                new QueryWrapper<Task>().ne("task_user_id", userId)
-        );
+    private List<Task> calculateSimilarityTopTwo(List<String> tags, Integer userId, @Nullable List<Integer> taskIDlist){
+
+        QueryWrapper<Task> queryWrapper = new QueryWrapper<>();
+        queryWrapper.ne("task_user_id", userId);
+
+        if (taskIDlist!=null){
+            for (Integer taskId : taskIDlist){
+                queryWrapper.ne("task_id", taskId);
+            }
+        }
+
+        List<Task> taskGet = tasksMapper.selectList(queryWrapper);
 
         if (taskGet.isEmpty()){
             return null;
@@ -118,7 +133,7 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
         result.sort(Comparator.comparingDouble(Task::getSimilarity).reversed());
 
         // get the top three
-        return result.subList(0, Math.min(3, result.size()));
+        return result.subList(0, Math.min(2, result.size()));
     }
 
 

@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class TaskIdVO {
     private Integer taskId;
+    private Long taskDuration;
 }
