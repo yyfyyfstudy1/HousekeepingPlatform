@@ -21,6 +21,6 @@ public class ProfileController {
     }
     @PostMapping("/update")
     public Result updateProfile(@RequestBody ProfileUpdate profileUpdate){
-        return Result.suc(userService.updateProfile(profileUpdate));
+        return userService.updateProfile(profileUpdate);
     }
 }
