@@ -63,7 +63,7 @@ public class ProfileControllerTest {
                 .andExpect(jsonPath("$.msg").value("successful"))
                 .andExpect(jsonPath("$.total").value(0))
                 .andExpect(jsonPath("$.data").value(true));
-
+ 
         profileUpdate.setId(1L);
         profileUpdate.setName("Ishikawa Hikaru");
         mockMvc.perform(post("/user/update")

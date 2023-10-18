@@ -158,7 +158,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.total").value(0))
                 .andExpect(jsonPath("$.data").value("error, the user doesn't exit"));
     }
-
+ 
     @Test
     public void testShowProfile() throws Exception {
         mockMvc.perform(get("/user/userInfo").param("email", "hiishikawa420@mail.com"))
