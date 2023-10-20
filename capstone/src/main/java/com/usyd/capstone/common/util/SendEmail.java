@@ -20,6 +20,7 @@ public class SendEmail {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
+            helper.setFrom("294006654@qq.com");
             helper.setTo(email);
             helper.setSubject("Welcome to our platform! Please verify your email");
 
@@ -35,7 +36,7 @@ public class SendEmail {
     }
 
     private static String getRegistEmailContent(String email, long registrationTimestamp, String passwordToken) {
-        String url = "http://localhost:8082/user/registrationVerification?email=" + email + "&registrationTimestamp=" +
+        String url = "http://localhost:8080/verification?email=" + email + "&registrationTimestamp=" +
                 registrationTimestamp + "&passwordToken=" + passwordToken;
         String emailContent = "<p>Dear user,</p>" +
                 "<p>Thank you for registering with us! To complete your registration, please click the link below to verify your email:</p>" +

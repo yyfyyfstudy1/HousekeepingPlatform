@@ -31,17 +31,24 @@ spring:
       max-total: 150
       max-idle: 10
   mail:
-    host: smtp.gmail.com
+    host: smtp.qq.com
     port: 587
-    username: yyfnhk@gmail.com
-    password: mqxbbhdchlgbaxlb
+     #默认的邮件编码为UTF-8
+    default-encoding: UTF-8
+    username: 294006654@qq.com
+    password: sfnqzdzjtbolbhch
     properties:
       mail:
+        #配置SSL 加密工厂
         smtp:
-          auth: true
-          starttls.enable: true
+          ssl:
+            #本地测试，先放开ssl
+            enable: false
+            required: false
+          #开启debug模式，这样邮件发送过程的日志会在控制台打印出来，方便排查错误
+        debug: true
 Paypal:
     mode: sandbox
     client:
-      app: AYGExS-fK1EKIhc3GikZm5u3iq9wv4rqm1Uo9dW1xiznclltkAEntbskJly4-natWWK2sEqtpHejkKSu
-      secret: EPa5YgUlJmFHo1XzP1YfulWpi3Zq18VK-VAAgroNwGgERc-qJd5J5KhQdXOuTOs1im9ZHTXxmcgN-mb3
+      app: Adk-ElqgP7foct2vVjDYMTn3k2MvctXLm-4mltFIeTrLF4l-er9LwLCY3fWrLe6FLlwq4jBVhlckayMa
+      secret: EMkndKRL0_QbPdYbFSYj0tDac3ld_SM3E9JJeS4tYd4WecVtCA86wwT2hFSSOzh59D26pIQKSjMzDuQ2
