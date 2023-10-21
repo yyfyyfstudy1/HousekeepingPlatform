@@ -38,7 +38,6 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, MessageDB> im
            return Result.suc(messageMapper.getMatchTaskerInfo(getMatchUserInfo.getUserId()));
         } else if (getMatchUserInfo.getRole().equals("labor")) {
             // search all match employer info
-            System.out.println(messageMapper.getMatchEmployerInfo(getMatchUserInfo.getUserId()));
           return Result.suc(messageMapper.getMatchEmployerInfo(getMatchUserInfo.getUserId()));
         }
         return Result.fail();

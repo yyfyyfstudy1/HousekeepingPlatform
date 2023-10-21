@@ -142,4 +142,15 @@ public class employerUserController {
         }
     }
 
+
+    @GetMapping("/getLaborWorkDuration")
+    public Result getLaborWorkDuration(@RequestParam Integer taskId){
+        TaskOngoing taskOngoing = taskOngoingService.getOne(
+                new QueryWrapper<TaskOngoing>().eq("task_id", taskId)
+        );
+
+        return  Result.suc(taskOngoing.getLaborWorkTime());
+
+    }
+
 }
