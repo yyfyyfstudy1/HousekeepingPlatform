@@ -2,6 +2,9 @@ package com.usyd.capstone.common.component;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.usyd.capstone.entity.Notification;
+import com.usyd.capstone.mapper.MessageMapper;
+import com.usyd.capstone.mapper.NotificationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -57,7 +60,22 @@ public class NotificationServer {
 
     @OnMessage
     public void onMessage(String message, Session session, @PathParam("userId") Integer userId) {
+
+        log.info("服务端收到用户userEmail={}的消息:{}", userId, message);
         JSONObject obj = JSONUtil.parseObj(message);
+
+        // 收到消息的反馈
+        Integer notificationID = obj.getInt("notificationId");
+        Integer isRead = obj.getInt("isRead");
+
+        if (isRead == 1){
+              // 更新数据库消息状态
+                NotificationMapper notificationMapper = applicationContext.getBean(NotificationMapper.class);
+                Notification notification = notificationMapper.selectById(notificationID);
+                notification.setIsRead(1);
+                notificationMapper.updateById(notification);
+        }
+
 
     }
     @OnError
@@ -74,6 +92,8 @@ public class NotificationServer {
             // 如果用户处于在线状态就进行推送
             if (sessionMap.get(userId)!=null){
                 sessionMap.get(userId).getBasicRemote().sendText(message);
+
+
             }
         } catch (Exception e) {
             log.error("服务端发送消息给客户端失败", e);

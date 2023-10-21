@@ -126,6 +126,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userNew.setRegistrationTimestamp(registrationTimeStamp);
             userNew.setPassword(passwordToken);
             userNew.setActivationStatus(false);
+            userNew.setAvatarUrl("http://localhost:8084/avatar3.png");
             sentEmail.sentRegistrationEmail(email, registrationTimeStamp, passwordToken);
             // 可以直接调用mybatisplus的insert方法
             userMapper.insert(userNew);
