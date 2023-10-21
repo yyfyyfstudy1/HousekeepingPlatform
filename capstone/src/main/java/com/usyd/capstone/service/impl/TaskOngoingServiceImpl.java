@@ -53,7 +53,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
 
        int i = taskOngoingMapper.updateById(taskOngoingOld);
        if (i!=0){
-           return sendNotification(taskOngoingOld.getTaskId(), 2, "ok", taskOngoingOld.getEmployerId(), "labor have take the task");
+           return sendNotification(taskOngoingOld.getTaskId(), 2, "ok", taskOngoingOld.getEmployerId(), "Tasker have take the task");
        }
        return Result.fail();
     }
@@ -111,7 +111,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         int i = taskOngoingMapper.updateById(taskOngoingOld);
 
         if (i!=0){
-            return sendNotification(taskOngoingOld.getTaskId(), 4, "ok", taskOngoingOld.getEmployerId(), "Labor has arrived");
+            return sendNotification(taskOngoingOld.getTaskId(), 4, "ok", taskOngoingOld.getEmployerId(), "Tasker has arrived");
         }
         return Result.fail();
     }
@@ -167,7 +167,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         int i = taskOngoingMapper.updateById(taskOngoingOld);
 
         if (i!=0){
-            return sendNotification(taskOngoingOld.getTaskId(), 4, "no", taskOngoingOld.getEmployerId(), "Labor is restart the task");
+            return sendNotification(taskOngoingOld.getTaskId(), 4, "no", taskOngoingOld.getEmployerId(), "Tasker is restart the task");
         }
         return Result.fail();
     }
@@ -201,7 +201,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         int i = taskOngoingMapper.updateById(taskOngoingOld);
 
         if (i!=0){
-            return sendNotification(taskOngoingOld.getTaskId(), 5, "ok", taskOngoingOld.getEmployerId(), "Labor has finished task");
+            return sendNotification(taskOngoingOld.getTaskId(), 5, "ok", taskOngoingOld.getEmployerId(), "Tasker has finished task");
         }
         return Result.fail();
     }
