@@ -11,6 +11,7 @@ import com.usyd.capstone.entity.User;
 import com.usyd.capstone.entity.VO.TakeTask;
 import com.usyd.capstone.entity.VO.UserPhase;
 import com.usyd.capstone.mapper.TaskOngoingMapper;
+import com.usyd.capstone.service.NotificationService;
 import com.usyd.capstone.service.TaskOngoingService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,10 @@ import org.springframework.stereotype.Service;
 public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskOngoing> implements TaskOngoingService {
     @Autowired
     TaskOngoingMapper taskOngoingMapper;
+
+    @Autowired
+    NotificationService notificationService;
+
     @Override
     public Result laborTakeTask(UserPhase userPhase) {
 
@@ -48,7 +53,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
 
        int i = taskOngoingMapper.updateById(taskOngoingOld);
        if (i!=0){
-           return sendNotification(taskOngoingOld.getTaskId(), 2, "ok", taskOngoingOld.getEmployerId(), "labor have take the task");
+           return sendNotification(taskOngoingOld.getTaskId(), 2, "ok", taskOngoingOld.getEmployerId(), "Tasker have take the task");
        }
        return Result.fail();
     }
@@ -106,7 +111,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         int i = taskOngoingMapper.updateById(taskOngoingOld);
 
         if (i!=0){
-            return sendNotification(taskOngoingOld.getTaskId(), 4, "ok", taskOngoingOld.getEmployerId(), "Labor has arrived");
+            return sendNotification(taskOngoingOld.getTaskId(), 4, "ok", taskOngoingOld.getEmployerId(), "Tasker has arrived");
         }
         return Result.fail();
     }
@@ -162,7 +167,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         int i = taskOngoingMapper.updateById(taskOngoingOld);
 
         if (i!=0){
-            return sendNotification(taskOngoingOld.getTaskId(), 4, "no", taskOngoingOld.getEmployerId(), "Labor is restart the task");
+            return sendNotification(taskOngoingOld.getTaskId(), 4, "no", taskOngoingOld.getEmployerId(), "Tasker is restart the task");
         }
         return Result.fail();
     }
@@ -196,7 +201,7 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
         int i = taskOngoingMapper.updateById(taskOngoingOld);
 
         if (i!=0){
-            return sendNotification(taskOngoingOld.getTaskId(), 5, "ok", taskOngoingOld.getEmployerId(), "Labor has finished task");
+            return sendNotification(taskOngoingOld.getTaskId(), 5, "ok", taskOngoingOld.getEmployerId(), "Tasker has finished task");
         }
         return Result.fail();
     }
@@ -223,19 +228,38 @@ public class TaskOngoingServiceImpl extends ServiceImpl<TaskOngoingMapper, TaskO
     }
 
 
-    private static Result sendNotification(int taskOngoingOldId, int phase, String ok, Integer taskOngoingOld1, String Labor_has_arrived) {
+    private  Result sendNotification(int taskId, int phase, String ok, Integer messageReceiverId, String notificationMessage) {
+
+
+
+        // save notification to database
+        com.usyd.capstone.entity.Notification notificationDB = new com.usyd.capstone.entity.Notification();
+         notificationDB.setTaskId(taskId);
+         notificationDB.setContent(notificationMessage);
+         notificationDB.setIsRead(0);
+         notificationDB.setReceivedUserId(messageReceiverId);
+         notificationDB.setSendTime(System.currentTimeMillis());
+
+         notificationService.save(notificationDB);
+
+
+
         Notification notification = new Notification();
 
-        notification.setTaskId(taskOngoingOldId);
+        notification.setTaskId(taskId);
         notification.setPhase(phase);
         notification.setStatus(ok);
 
+        // 设置notification的ID
+        notification.setNotificationId(notificationDB.getId());
         String result = JSONObject.toJSONString(notification);
 
-        // send message to employer
-        NotificationServer.sendMessage(result, taskOngoingOld1);
 
-        return Result.suc(Labor_has_arrived);
+
+        // send message
+        NotificationServer.sendMessage(result, messageReceiverId);
+
+        return Result.suc(notificationMessage);
     }
 
 }
