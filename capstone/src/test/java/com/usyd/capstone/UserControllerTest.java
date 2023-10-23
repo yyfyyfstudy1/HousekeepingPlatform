@@ -27,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
+    private Long testUserId = 34L;
     @Test
     public void testUserLogin() throws Exception {
         // Given
@@ -42,7 +44,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.msg").value("successful"))
                 .andExpect(jsonPath("$.total").value(0))
-                .andExpect(jsonPath("$.data.userInfo.id").value(22L));
+                .andExpect(jsonPath("$.data.userInfo.id").value(testUserId));
 
     }
     @Test
@@ -158,7 +160,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.total").value(0))
                 .andExpect(jsonPath("$.data").value("error, the user doesn't exit"));
     }
- 
+
     @Test
     public void testShowProfile() throws Exception {
         mockMvc.perform(get("/user/userInfo").param("email", "hiishikawa420@mail.com"))

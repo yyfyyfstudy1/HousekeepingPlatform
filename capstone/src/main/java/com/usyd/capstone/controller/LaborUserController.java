@@ -49,7 +49,7 @@ public class LaborUserController {
         if (result == null){
             return Result.fail("No matching work");
         }
-
+        System.out.println(result);
         return Result.suc(result);
     }
 
