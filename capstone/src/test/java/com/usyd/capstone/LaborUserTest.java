@@ -5,16 +5,19 @@ import com.alibaba.fastjson.JSONObject;
 import com.usyd.capstone.entity.VO.UserLogin;
 import com.usyd.capstone.entity.VO.UserPhase;
 import com.usyd.capstone.entity.VO.requestDistribute;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +44,12 @@ public class LaborUserTest {
 
     private Integer testTaskId2 = 130;
 
+    @Autowired
+    RedisTemplate redisTemplate;
+
+
     @Before
-    public void loginAndGetToken() throws Exception {
+    public void loginAndGetToken() throws Exception {;
         // Given
         UserLogin userLogin = new UserLogin();
         userLogin.setEmail("294006654@qq.com");
@@ -66,9 +73,8 @@ public class LaborUserTest {
                 .getString("token");
     }
 
-
-
     @Test
+    @Transactional
     public void testTaskTakeTask() throws Exception {
 
         UserPhase userPhase = new UserPhase();
@@ -91,6 +97,7 @@ public class LaborUserTest {
 
 
     @Test
+    @Transactional
     public void testLaborConfirmArrived() throws Exception {
 
         UserPhase userPhase = new UserPhase();
@@ -114,6 +121,7 @@ public class LaborUserTest {
 
 
     @Test
+    @Transactional
     public void testLaborStopTask() throws Exception {
 
         UserPhase userPhase = new UserPhase();
@@ -136,6 +144,7 @@ public class LaborUserTest {
 
 
     @Test
+    @Transactional
     public void testLaborRestartTask() throws Exception {
 
         UserPhase userPhase = new UserPhase();
@@ -158,6 +167,7 @@ public class LaborUserTest {
 
 
     @Test
+    @Transactional
     public void testLaborFinishedTask() throws Exception {
 
         UserPhase userPhase = new UserPhase();

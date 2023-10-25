@@ -21,6 +21,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,7 @@ public class EmployerUserControllerTest {
 
 
     @Test
+    @Transactional
     public void testUploadImage() throws Exception {
         MockMultipartFile file = new MockMultipartFile("file", "test.jpg", "image/jpeg", "test image content".getBytes());
 
@@ -88,6 +90,7 @@ public class EmployerUserControllerTest {
 
 
     @Test
+    @Transactional
     public void testEmployerConfirm() throws Exception {
 
         UserPhase userPhase = new UserPhase();
@@ -109,6 +112,7 @@ public class EmployerUserControllerTest {
     }
 
     @Test
+    @Transactional
     public void testGetCurrentTaskPhase() throws Exception {
 
         // 模拟GET请求
@@ -156,6 +160,7 @@ public class EmployerUserControllerTest {
 
 
     @Test
+    @Transactional
     public void getTaskDetailById() throws Exception {
 
         // 模拟GET请求
@@ -173,6 +178,7 @@ public class EmployerUserControllerTest {
 
 
     @Test
+    @Transactional
     public void getTaskPhaseFourBeginTime() throws Exception {
 
         // 模拟GET请求
@@ -189,6 +195,7 @@ public class EmployerUserControllerTest {
 
 
     @Test
+    @Transactional
     public void getLaborWorkDuration() throws Exception {
 
         // 模拟GET请求
@@ -205,6 +212,7 @@ public class EmployerUserControllerTest {
 
 
     @Test
+    @Transactional
     public void editMyTask() throws Exception {
         ModifyTaskInfoVO modifyTaskInfoVO = new ModifyTaskInfoVO();
 
@@ -229,6 +237,7 @@ public class EmployerUserControllerTest {
 
 
     @Test
+    @Transactional
     public void testPostTask() throws Exception {
 
         TaskVO taskVO = new TaskVO();
@@ -290,6 +299,7 @@ public class EmployerUserControllerTest {
 
 
     @Test
+    @Transactional
     public void testDeleteMyTaskByTasker() throws Exception {
 
         // 模拟GET请求

@@ -49,15 +49,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.listAll();
     }
 
-    @Override
-    public IPage pageC(Page<User> page) {
-        return userMapper.pageC(page);
-    }
-
-    @Override
-    public IPage pageCC(Page<User> page, Wrapper wrapper) {
-        return userMapper.pageCC(page, wrapper);
-    }
 
     @Override
     public Result verifyLogin(UserLogin userLogin) {

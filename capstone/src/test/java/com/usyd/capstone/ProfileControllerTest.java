@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 // Static imports
 import static org.mockito.Mockito.*;
@@ -31,23 +32,29 @@ public class ProfileControllerTest {
     private MockMvc mockMvc;
 //    @MockBean
 //    private UserService userService;
+
+    private  Integer userId = 35;
+    private String userEmail = "yiyu7699@uni.sydney.edu.au";
+
     @Test
+    @Transactional
     public void testShowProfile() throws Exception {
-        mockMvc.perform(get("/user/profile").param("id", "1"))
+        mockMvc.perform(get("/user/profile").param("id", String.valueOf(userId)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.msg").value("successful"))
                 .andExpect(jsonPath("$.total").value(0))
-                .andExpect(jsonPath("$.data.id").value(1L))
-                .andExpect(jsonPath("$.data.name").value("Ishikawa Hikaru"));
+                .andExpect(jsonPath("$.data.id").value(userId))
+                .andExpect(jsonPath("$.data.name").value("yifan yu"));
 
     }
 
     @Test
+    @Transactional
     public void testUpdateProfile() throws Exception {
         // Given
         ProfileUpdate profileUpdate = new ProfileUpdate();
-        profileUpdate.setId(1L);
+        profileUpdate.setId(Long.valueOf(userId));
         profileUpdate.setName("Jacoco");
         // Set other fields if needed, like phone, address, etc.
 
@@ -64,8 +71,8 @@ public class ProfileControllerTest {
                 .andExpect(jsonPath("$.total").value(0))
                 .andExpect(jsonPath("$.data").value(true));
  
-        profileUpdate.setId(1L);
-        profileUpdate.setName("Ishikawa Hikaru");
+        profileUpdate.setId(Long.valueOf(userId));
+        profileUpdate.setName("yifan yu");
         mockMvc.perform(post("/user/update")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(profileUpdate)))

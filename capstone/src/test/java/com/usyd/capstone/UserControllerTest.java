@@ -13,6 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 // Static imports
 import static org.mockito.Mockito.*;
@@ -29,6 +30,9 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     private Long testUserId = 34L;
+
+    private  Integer userId = 35;
+    private String userEmail = "yiyu7699@uni.sydney.edu.au";
     @Test
     public void testUserLogin() throws Exception {
         // Given
@@ -48,6 +52,7 @@ public class UserControllerTest {
 
     }
     @Test
+    @Transactional
     public void testForgetPassword() throws Exception {
         // Given
         EmailAddress emailAddress = new EmailAddress();
@@ -65,6 +70,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @Transactional
     public void testUpdatePassword() throws Exception {
         // Given
         UpdatePasswordParameter updatePasswordParameter = new UpdatePasswordParameter();
@@ -97,6 +103,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @Transactional
     public void testRegistration() throws Exception {
         // Given
         UserRegistration userRegistration = new UserRegistration();
@@ -124,6 +131,7 @@ public class UserControllerTest {
     }
 
     @Test
+    @Transactional
     public void testForgetPasswordVerification() throws Exception {
         mockMvc.perform(get("/user/forgetPasswordVerification").param("email", "hiishikawa420@mail.com")
                         .param("resettingPasswordTimestamp", "1621384321000"))
@@ -135,6 +143,7 @@ public class UserControllerTest {
 
     }
     @Test
+    @Transactional
     public void testRegistrationVerification() throws Exception {
         mockMvc.perform(get("/user/registrationVerification").param("email", "hiishikawa420@mail.com")
                         .param("registrationTimestamp", "1621384321000")
@@ -146,8 +155,9 @@ public class UserControllerTest {
 
     }
     @Test
+    @Transactional
     public void testPollingResult() throws Exception {
-        mockMvc.perform(get("/user/pollingResult").param("email", "hiishikawa420@mail.com"))
+        mockMvc.perform(get("/user/pollingResult").param("email", userEmail))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.msg").value("successful"))
@@ -162,14 +172,15 @@ public class UserControllerTest {
     }
 
     @Test
+    @Transactional
     public void testShowProfile() throws Exception {
-        mockMvc.perform(get("/user/userInfo").param("email", "hiishikawa420@mail.com"))
+        mockMvc.perform(get("/user/userInfo").param("email", userEmail))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.msg").value("successful"))
                 .andExpect(jsonPath("$.total").value(0))
-                .andExpect(jsonPath("$.data.id").value(1L))
-                .andExpect(jsonPath("$.data.name").value("Ishikawa Hikaru"));
+                .andExpect(jsonPath("$.data.id").value(userId))
+                .andExpect(jsonPath("$.data.name").value("yifan yu"));
 
     }
 

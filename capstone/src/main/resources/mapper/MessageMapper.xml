@@ -22,14 +22,18 @@
         ORDER BY post_time ASC;
     </select>
     <select id="getMatchTaskerInfo" resultType="com.usyd.capstone.entity.User">
-        SELECT *
-        FROM task_ongoing
-                JOIN user ON task_ongoing.labor_id = user.id
-        WHERE task_ongoing.employer_id = #{userId}
-        GROUP BY user.id
+        SELECT user.id, user.address, `user`.age, `user`.avatar_url, `user`.email, `user`.introduction, `user`.`name`
+        FROM
+            task_ongoing
+                JOIN USER ON task_ongoing.labor_id = USER.id
+        WHERE
+            task_ongoing.employer_id = #{userId}
+
+        GROUP BY
+            USER.id
     </select>
     <select id="getMatchEmployerInfo" resultType="com.usyd.capstone.entity.User">
-        SELECT *
+        SELECT user.id, user.address, `user`.age, `user`.avatar_url, `user`.email, `user`.introduction, `user`.`name`
         FROM task_ongoing
                  LEFT JOIN user ON task_ongoing.employer_id = user.id
         WHERE task_ongoing.labor_id = #{userId}
