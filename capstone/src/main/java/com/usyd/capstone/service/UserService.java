@@ -17,10 +17,6 @@ public interface UserService extends IService<User> {
 
     List<User> listAll();
 
-    IPage pageC(Page<User> page);
-
-    IPage pageCC(Page<User> page, Wrapper wrapper);
-
     Result verifyLogin(UserLogin userLogin);
 
     Result registration(String email, String password, String firstname, String lastname);

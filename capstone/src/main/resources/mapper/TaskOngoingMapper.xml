@@ -19,7 +19,7 @@
     </sql>
     <select id="getTaskerInfoByTaskerId" resultType="com.usyd.capstone.entity.User" parameterType="java.lang.Integer">
         SELECT * FROM task_ongoing
-                          LEFT JOIN user ON task_ongoing.employer_id = user.id
+                          LEFT JOIN user ON task_ongoing.labor_id = user.id
         WHERE task_id = #{taskId}
     </select>
 
