@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static com.usyd.capstone.common.util.JaccardSimilarityExample.removeSpecialCharactersAndSpaces;
+
 /**
  * <p>
  *  前端控制器
@@ -34,15 +36,16 @@ public class LaborUserController {
     @Autowired
     private TaskOngoingService taskOngoingService;
 
+
     @PostMapping("/getDistribute")
     public Result getDistribute(@RequestBody requestDistribute query) throws ExecutionException, InterruptedException {
 
         List<finalResponse> result;
         if (query.getTaskIDList() !=null){
 
-            result = tasksService.distribute(query.getCV(), query.getTags(), query.getUserId(), query.getTaskIDList());
+            result = tasksService.distribute(removeSpecialCharactersAndSpaces(query.getCV()), query.getTags(), query.getUserId(), query.getTaskIDList());
         }else {
-           result = tasksService.distribute(query.getCV(), query.getTags(), query.getUserId(), null);
+           result = tasksService.distribute(removeSpecialCharactersAndSpaces(query.getCV()), query.getTags(), query.getUserId(), null);
         }
 
 
