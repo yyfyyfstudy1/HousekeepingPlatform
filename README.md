@@ -106,7 +106,7 @@
 
 1. **Employer Browse tasker information and confirm task**
 
-1. **Mission map navigation**
+1. **Mission map navigation and Address autocomplete**
 
 1. **Task timing**
 
