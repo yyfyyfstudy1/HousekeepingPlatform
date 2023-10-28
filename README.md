@@ -83,6 +83,52 @@
 
 23. **org.junit.vintage:junit-vintage-engine** - Version: 5.7.1
     - Engine for compatibility with JUnit 4, used for unit testing.
+    
+    
+    
+## Project working functionalities
+
+1. **Login**
+
+1. **Register with email vertify**
+
+1. **Post a job**
+
+1. **User profile**
+
+1. **User update personal information and upload avatar**
+
+1. **Employer post job with Task template**
+
+1. **intelligently matches tasks**
+
+1. **Tasker take task**
+
+1. **Employer Browse tasker information and confirm task**
+
+1. **Mission map navigation**
+
+1. **Task timing**
+
+1. **Tasker pauses tasks and recovery task**
+
+1. **Task Settlement and Task Payment (use paypal)**
+
+1. **Live chat room**
+
+1. **Chat room multi-language translation**
+
+1. **Task Time schedule management (Modify task information)**
+
+1. **Task script management (task statistics)**
+
+1. **System message push**
+
+1. **System message management**
+
+
+
+
 
 ## Run Project Guide
 
