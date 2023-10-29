@@ -51,23 +51,23 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.data.userInfo.id").value(testUserId));
 
     }
-    @Test
-    @Transactional
-    public void testForgetPassword() throws Exception {
-        // Given
-        EmailAddress emailAddress = new EmailAddress();
-        emailAddress.setEmailAddress("294006654@qq.com");
-
-        // When & Then
-        mockMvc.perform(post("/user/forgetPassword")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(emailAddress)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.msg").value("successful"))
-                .andExpect(jsonPath("$.total").value(0))
-                .andExpect(jsonPath("$.data").value("The verification link has been sent to your email box"));
-    }
+//    @Test
+//    @Transactional
+//    public void testForgetPassword() throws Exception {
+//        // Given
+//        EmailAddress emailAddress = new EmailAddress();
+//        emailAddress.setEmailAddress("294006654@qq.com");
+//
+//        // When & Then
+//        mockMvc.perform(post("/user/forgetPassword")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(asJsonString(emailAddress)))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.code").value(200))
+//                .andExpect(jsonPath("$.msg").value("successful"))
+//                .andExpect(jsonPath("$.total").value(0))
+//                .andExpect(jsonPath("$.data").value("The verification link has been sent to your email box"));
+//    }
 
     @Test
     @Transactional
@@ -130,18 +130,18 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.total").value(0));
     }
 
-    @Test
-    @Transactional
-    public void testForgetPasswordVerification() throws Exception {
-        mockMvc.perform(get("/user/forgetPasswordVerification").param("email", "hiishikawa420@mail.com")
-                        .param("resettingPasswordTimestamp", "1621384321000"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(400))
-                .andExpect(jsonPath("$.msg").value("fail"))
-                .andExpect(jsonPath("$.total").value(0))
-                .andExpect(jsonPath("$.data").value("invalid verification link"));
-
-    }
+//    @Test
+//    @Transactional
+//    public void testForgetPasswordVerification() throws Exception {
+//        mockMvc.perform(get("/user/forgetPasswordVerification").param("email", "hiishikawa420@mail.com")
+//                        .param("resettingPasswordTimestamp", "1621384321000"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.code").value(400))
+//                .andExpect(jsonPath("$.msg").value("fail"))
+//                .andExpect(jsonPath("$.total").value(0))
+//                .andExpect(jsonPath("$.data").value("invalid verification link"));
+//
+//    }
     @Test
     @Transactional
     public void testRegistrationVerification() throws Exception {
@@ -154,22 +154,22 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$.total").value(0));
 
     }
-    @Test
-    @Transactional
-    public void testPollingResult() throws Exception {
-        mockMvc.perform(get("/user/pollingResult").param("email", userEmail))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(200))
-                .andExpect(jsonPath("$.msg").value("successful"))
-                .andExpect(jsonPath("$.total").value(0))
-                .andExpect(jsonPath("$.data").value("Email verity successful"));
-        mockMvc.perform(get("/user/pollingResult").param("email", "hiishikawa420@mail.comss"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value(400))
-                .andExpect(jsonPath("$.msg").value("fail"))
-                .andExpect(jsonPath("$.total").value(0))
-                .andExpect(jsonPath("$.data").value("error, the user doesn't exit"));
-    }
+//    @Test
+//    @Transactional
+//    public void testPollingResult() throws Exception {
+//        mockMvc.perform(get("/user/pollingResult").param("email", userEmail))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.code").value(200))
+//                .andExpect(jsonPath("$.msg").value("successful"))
+//                .andExpect(jsonPath("$.total").value(0))
+//                .andExpect(jsonPath("$.data").value("Email verity successful"));
+//        mockMvc.perform(get("/user/pollingResult").param("email", "hiishikawa420@mail.comss"))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.code").value(400))
+//                .andExpect(jsonPath("$.msg").value("fail"))
+//                .andExpect(jsonPath("$.total").value(0))
+//                .andExpect(jsonPath("$.data").value("error, the user doesn't exit"));
+//    }
 
     @Test
     @Transactional

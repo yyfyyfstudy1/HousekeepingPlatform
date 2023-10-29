@@ -15,7 +15,6 @@ import java.util.List;
 
 public interface UserService extends IService<User> {
 
-    List<User> listAll();
 
     Result verifyLogin(UserLogin userLogin);
 
@@ -23,15 +22,7 @@ public interface UserService extends IService<User> {
 
     Result registrationVerification(String email, long registrationTimestamp, String passwordToken);
 
-    Result forgetPassword(EmailAddress emailAddress);
 
-    Result forgetPasswordVerification(String email, long registrationTimestamp);
-
-    Result pollingResult(String email);
-
-    Result updatePassword(UpdatePasswordParameter updatePasswordParameter);
-
-    List<User> findAllUser();
 
     Result updateProfile(ProfileUpdate profileUpdate);
 }
