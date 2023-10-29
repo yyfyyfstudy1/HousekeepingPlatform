@@ -22,6 +22,7 @@ import com.usyd.capstone.mapper.UserMapper;
 import com.usyd.capstone.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -97,6 +98,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return Result.suc(resultMap);
     }
 
+    @Value("${image.Url}") // 从配置文件获取上传目录
+    private String imageUrl;
     @Override
     public Result registration(String email, String password, String firstname, String lastname){
         long registrationTimeStamp = System.currentTimeMillis();
@@ -110,7 +113,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             userNew.setRegistrationTimestamp(registrationTimeStamp);
             userNew.setPassword(passwordToken);
             userNew.setActivationStatus(false);
-            userNew.setAvatarUrl("http://localhost:8084/avatar3.png");
+            userNew.setAvatarUrl(imageUrl+ "default.jpg");
             sentEmail.sentRegistrationEmail(email, registrationTimeStamp, passwordToken);
             // 可以直接调用mybatisplus的insert方法
             userMapper.insert(userNew);
