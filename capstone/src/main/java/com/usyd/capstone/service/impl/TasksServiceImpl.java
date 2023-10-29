@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import static com.usyd.capstone.common.util.JaccardSimilarityExample.calculateJaccardSimilarity;
+import static com.usyd.capstone.common.util.JaccardSimilarityExample.removeSpecialCharactersAndSpaces;
 
 /**
  * <p>
@@ -154,7 +155,7 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Task> implements 
         use.append(cv);
         use.append("> there have a task that matches his label. Please analyze the reason why this task is suitable for him. Please don’t say any extra words, like the describe of task,  just give  your reason. When replying,Use the second person perspective, replace the word <my> and <his> with <your>." );
 
-        use.append(" task:").append(task.getTaskDescribe());
+        use.append(" task:").append(removeSpecialCharactersAndSpaces(task.getTaskDescribe()));
         use.append(";");
         System.out.println(use);
 

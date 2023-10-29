@@ -25,33 +25,6 @@ public class userController {
 
     }
 
-    @PostMapping("/forgetPassword")
-    public Result forgetPassword(@RequestBody EmailAddress emailAddress){
-
-        return userService.forgetPassword(emailAddress);
-
-    }
-
-    @GetMapping("/forgetPasswordVerification")
-    public Result forgetPasswordVerification(@RequestParam("email") String email, @RequestParam("resettingPasswordTimestamp")
-    long resettingPasswordTimestamp){
-        return userService.forgetPasswordVerification(email, resettingPasswordTimestamp);
-    }
-
-    @GetMapping("/pollingResult")
-    public Result pollingResult(@RequestParam("email") String email){
-
-        return userService.pollingResult(email);
-    }
-
-
-    // TODO 需要完善加个token
-    @PostMapping("/updatePassword")
-    public Result updatePassword(@RequestBody UpdatePasswordParameter updatePasswordParameter){
-
-        return userService.updatePassword(updatePasswordParameter);
-
-    }
 
     @PostMapping("/registration")
     public Result register(@RequestBody UserRegistration userRegistration){
