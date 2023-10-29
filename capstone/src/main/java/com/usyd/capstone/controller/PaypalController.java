@@ -8,6 +8,7 @@ import com.usyd.capstone.service.PaypalService;
 import com.usyd.capstone.service.TaskOngoingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,6 +75,9 @@ public class PaypalController {
      * @param payerId
      * @return
      */
+
+    @Value("${base.Url}") // 从配置文件获取上传目录
+    private String baseUrl;
     @GetMapping(PAYPAL_SUCCESS_URL)
     public ResponseEntity<Void>  successPay(@RequestParam("paymentId") String paymentId,
                                             @RequestParam("PayerID") String payerId,
@@ -85,9 +89,9 @@ public class PaypalController {
         Payment payment = paypalService.executePayment(paymentId, payerId);
         URI redirectUri;
         if(payment.getState().equals("approved")){
-            redirectUri = URI.create("http://localhost:8080/pay/payment-success");
+            redirectUri = URI.create(baseUrl+ "/pay/payment-success");
         } else {
-            redirectUri = URI.create("http://localhost:8080/");
+            redirectUri = URI.create(baseUrl + "localhost:8080/");
         }
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(redirectUri);

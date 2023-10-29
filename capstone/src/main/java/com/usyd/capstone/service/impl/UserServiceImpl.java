@@ -44,10 +44,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private SendEmail sentEmail;
 
 
-    @Override
-    public List<User> listAll() {
-        return userMapper.listAll();
-    }
 
 
     @Override
@@ -102,9 +98,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    //如果用户不存在->存一个新用户+发邮件+返回“已保存”
-    //如果存在->如果已激活->报错“已激活”
-    //如果存在->如果未激活->更新该用户+发邮件+返回“已更新”
     public Result registration(String email, String password, String firstname, String lastname){
         long registrationTimeStamp = System.currentTimeMillis();
         String passwordToken = passwordEncoder.encode(email + password + PublicKey.firstKey.getValue());
@@ -176,102 +169,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
     }
 
-    @Override
-    public Result forgetPassword(EmailAddress emailAddress) {
 
 
-        User user = userMapper.selectOne(new QueryWrapper<User>().eq("email", emailAddress.getEmailAddress()));
-        if (user == null){
-            return Result.fail("your email address is wrong");
-        }
-        user.setResettingPasswordTimestamp(System.currentTimeMillis());
-
-        if (!user.isActivationStatus()){
-            return Result.fail("your account is not active");
-        }
-
-        // send verify email
-        sentEmail.sentForgetEmail( emailAddress.getEmailAddress(), user.getResettingPasswordTimestamp());
-        userMapper.updateById(user);
-        return Result.suc("The verification link has been sent to your email box");
-    }
-
-    @Override
-    public Result forgetPasswordVerification(String email, long resettingPasswordTimestamp) {
-
-        User user = userMapper.selectOne(new QueryWrapper<User>().eq("email", email));
-        if (user == null){
-            return Result.fail("invalid verification link");
-        }
-        if(user.getResettingPasswordTimestamp() != resettingPasswordTimestamp)
-        {
-            return Result.fail("invalid verification link");
-        }
-        if (System.currentTimeMillis() - resettingPasswordTimestamp > 86400000L){
-            return Result.fail("The resetting password verification link is out of date!");
-        }
-        user.setResettingPasswordTimestamp(System.currentTimeMillis());
-        user.setForgetPasswordVerity(true);
-        userMapper.updateById(user);
-        return Result.suc("The resetting password verification has been verified successfully!" +
-                "You will have 30 minutes to set a new password");
-    }
-
-    @Override
-    public Result pollingResult(String email) {
-
-        User user = userMapper.selectOne(new QueryWrapper<User>().eq("email", email));
-
-        if (user == null){
-            return Result.fail("error, the user doesn't exit");
-        }
-
-        if (user.isForgetPasswordVerity()){
-            return Result.suc("Email verity successful");
-        }else {
-            return Result.fail("Email still not verity");
-        }
-    }
-
-    //TODO 检测两个密码是否一致的功能移到前端（？）
-    @Override
-    public Result updatePassword(UpdatePasswordParameter updatePasswordParameter) {
-
-        String email = updatePasswordParameter.getEmail();
-        String password = updatePasswordParameter.getPassword();
-        String passwordTwo = updatePasswordParameter.getPassword2();
-
-        User user = userMapper.selectOne(new QueryWrapper<User>().eq("email", email));
-        if (user == null){
-            return Result.fail("error, can`t find this user");
-        }
-        if (!user.isForgetPasswordVerity()){
-            return Result.fail("your resetting password request hasn't been verity by email");
-        }
-        if (System.currentTimeMillis() - user.getResettingPasswordTimestamp() > 1800000L)
-        {
-            user.setForgetPasswordVerity(false);
-            userMapper.updateById(user);
-            return Result.fail("resetting password permission has been out of date.");
-        }
-        if (!password.equals(passwordTwo)){
-            return Result.fail("your two password is not same ");
-        }
-        // encode password
-        String passwordToken = passwordEncoder.encode(email + password + PublicKey.firstKey.getValue());
-        user.setPassword(passwordToken);
-        user.setForgetPasswordVerity(false);
-
-        userMapper.updateById(user);
-
-        return Result.suc("user password has been update");
-    }
-
-    @Override
-    public List<User> findAllUser() {
-//        userMapper.selectList(new QueryWrapper<>());
-        return userMapper.finelec5619User();
-    }
 
     @Override
     public Result updateProfile(ProfileUpdate profileUpdate) {
