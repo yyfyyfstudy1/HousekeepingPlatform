@@ -161,7 +161,7 @@ npm run serve
 - Java 8
 - Maven 2.0
 - Redis 5.0  port 6379
-- Nginx (Set the redirection rule to the project root directory, port 8084)
+
 
 **Project Setup:**
 
